@@ -1,835 +1,655 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="dark">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>Dream Yoga Studio & Wellness Center</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pediatric Dentist in Houston | Dental Clinics of Texas</title>
-  <meta name="description" content="Board-certified pediatric dentists offering preventive, sedation, emergency & hospital dentistry. Call 832-427-1901." />
-
-  <!-- Tailwind Play CDN (prototype). For production, compile Tailwind. -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            teal: '#1EA7A7',
-            seafoam: '#8FD6D6',
-            coral: '#FF8C7E',
-            warmnavy: '#0D2B3E',
-            offwhite: '#FBFCFD'
-          },
           fontFamily: {
-            heading: ['Poppins','Inter','sans-serif'],
-            body: ['Roboto','Inter','sans-serif']
+            sans: ['Inter', 'system-ui', 'sans-serif'],
           },
-          keyframes: {
-            float: { '0%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-8px)' }, '100%': { transform: 'translateY(0px)' } },
-            fadeUp: { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-            pulseSoft: { '0%': { boxShadow: '0 0 0 0 rgba(30,167,167,0.25)' }, '70%': { boxShadow: '0 0 0 12px rgba(30,167,167,0)' }, '100%': { boxShadow: '0 0 0 0 rgba(30,167,167,0)' } }
-          },
-          animation: {
-            float: 'float 6s ease-in-out infinite',
-            'fade-up': 'fadeUp 600ms ease forwards',
-            'pulse-soft': 'pulseSoft 2.5s infinite'
-          }
-        }
-      }
-    }
+        },
+      },
+    };
   </script>
-
+  <!-- Google Fonts (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-uYnsQiJzCPVCKivk6qQ4xXo8j7ywnVUFlAsbW6nM4Z0D3pRJe6oYT0xqXKuC8OsK5ij9UcPGi9uJZ0sBstqzDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha512-v+Wfpb2tgwLh3XCYEnCqg2O8/SJqk8StnBz29hC2lc4k5DzF4WLhUeBFumR3eZ2ReFNr8V1LLtXAkx3X9h9QYw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
-    html { scroll-behavior: smooth }
-    /* Custom utilities that complement Tailwind for this prototype */
-    .reveal { opacity: 0; transform: translateY(12px); }
-    .reveal.visible { opacity: 1; transform: translateY(0); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.3,1); }
-
-    /* Decorative gradient masks */
-    .blob { position: absolute; filter: blur(36px); opacity: .18; transform: translateZ(0); }
-
-    /* Small testimonial slider (CSS-only simple) */
-    .testimonial-track { display:flex; gap:1rem; animation: slide 18s linear infinite; }
-    @keyframes slide { 0% { transform: translateX(0%); } 20% { transform: translateX(0%); } 33% { transform: translateX(-33.333%); } 53% { transform: translateX(-33.333%); } 66% { transform: translateX(-66.666%); } 86% { transform: translateX(-66.666%); } 100% { transform: translateX(0%); } }
-
-    /* subtle utilities for focus outlines */
-    :focus { outline: 3px solid rgba(30,167,167,0.14); outline-offset: 3px; }
-
+    html { scroll-behavior: smooth; }
   </style>
 </head>
-<body class="antialiased bg-gradient-to-b from-offwhite to-white text-warmnavy font-body">
+<body class="font-sans text-slate-100 bg-gradient-to-b from-[#050716] via-[#080B1F] to-[#0B1024]">
+  <!-- Gradient blobs background -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-40 -left-20 h-80 w-80 rounded-full bg-gradient-to-br from-purple-500/40 via-indigo-500/30 to-teal-400/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-gradient-to-tr from-teal-400/30 via-sky-500/30 to-amber-300/20 blur-3xl"></div>
+  </div>
 
-  <!-- Decorative blobs -->
-  <div aria-hidden="true" class="blob left-0 top-6 w-60 h-60 rounded-full bg-gradient-to-br from-teal to-seafoam transform -translate-x-1/3 -translate-y-1/3 animate-float" style="position:fixed; z-index:-1; left:-80px; top:40px;"></div>
-  <div aria-hidden="true" class="blob right-0 bottom-20 w-72 h-72 rounded-full bg-gradient-to-br from-coral to-teal transform translate-x-1/4 translate-y-1/4 animate-float" style="position:fixed; z-index:-1; right:-100px; bottom:40px;"></div>
-
-  <!-- Header -->
-  <header class="sticky top-4 z-50 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="backdrop-blur-md bg-white/70 border border-gray-100 rounded-lg shadow-sm p-3 flex items-center justify-between gap-4">
-      <a href="#hero" class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal to-seafoam text-white flex items-center justify-center font-bold text-lg shadow">D</div>
-        <div class="hidden sm:block leading-tight">
-          <div class="text-sm font-semibold">Dental Clinics of Texas</div>
-          <div class="text-xs text-gray-500">Pediatric Dentistry • Houston</div>
-        </div>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-        <a href="#services" class="hover:text-teal transition">Services</a>
-        <a href="#team" class="hover:text-teal transition">Our Team</a>
-        <a href="#resources" class="hover:text-teal transition">Resources</a>
-        <a href="#contact" class="hover:text-teal transition">Contact</a>
-      </nav>
-
-      <div class="flex items-center gap-3">
-        <a href="tel:832-427-1901" class="hidden lg:inline-flex items-center gap-2 text-sm px-3 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:scale-102 transition">📞 832‑427‑1901</a>
-        <button id="open-booking" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal to-seafoam text-warmnavy font-semibold shadow hover:scale-105 transition">
-  Book Appointment
-</button>
-
-
-        <button id="menu-btn" class="md:hidden p-2 rounded-full bg-white border border-gray-100 shadow-sm" aria-expanded="false" aria-controls="mobile-menu">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
+  <!-- HEADER + TOP STICKY BAR -->
+  <header class="sticky top-0 z-40">
+    <!-- Top announcement bar -->
+    <div class="bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/70">
+      <div class="mx-auto flex max-w-6xl items-center justify-center px-4 py-2 text-[11px] text-slate-200 gap-2">
+        <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-teal-400/70 to-amber-300/70 text-[9px] text-slate-950 font-semibold shadow-md shadow-teal-400/40">
+          ✺
+        </span>
+        <p class="text-center">
+          Offering Yoga &amp; Meditation Classes, Yoga Therapy &amp; Life Coaching since 2001
+        </p>
       </div>
     </div>
 
-    <div id="mobile-menu" class="hidden mt-3 rounded-lg bg-white/80 backdrop-blur p-3 border border-gray-100">
-      <div class="flex flex-col gap-2">
-        <a href="#services" class="py-2 px-3 rounded hover:bg-gray-50">Services</a>
-        <a href="#team" class="py-2 px-3 rounded hover:bg-gray-50">Our Team</a>
-        <a href="#resources" class="py-2 px-3 rounded hover:bg-gray-50">Resources</a>
-        <a href="#contact" class="py-2 px-3 rounded hover:bg-gray-50">Contact</a>
+    <!-- Main nav bar -->
+    <div class="border-b border-slate-700/40 bg-slate-900/20 backdrop-blur-xl">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
+        <div class="flex items-center gap-2">
+          <span class="h-8 w-8 rounded-2xl bg-gradient-to-br from-purple-400 to-teal-300 shadow-lg shadow-purple-500/40"></span>
+          <span class="text-sm font-semibold tracking-wide text-slate-100 md:text-base">
+            Dream Yoga Studio &amp; Wellness Center
+          </span>
+        </div>
+
+        <nav class="hidden items-center gap-6 text-sm text-slate-200 md:flex">
+          <a href="#home" class="hover:text-teal-300 transition-colors">Home</a>
+          <a href="#about" class="hover:text-teal-300 transition-colors">About</a>
+          <a href="#services" class="hover:text-teal-300 transition-colors">Services</a>
+          <a href="#blog" class="hover:text-teal-300 transition-colors">Blog</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button class="hidden rounded-full border border-teal-300/60 bg-teal-300/5 px-3 py-1.5 text-xs font-medium text-teal-200 backdrop-blur-md transition hover:bg-teal-300/15 md:inline-flex">
+            Schedule a Free Clarity Call
+          </button>
+          <button class="hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-4 py-1.5 text-xs font-semibold text-slate-950 shadow-lg shadow-indigo-500/40 transition-transform hover:-translate-y-0.5 hover:shadow-teal-400/40 md:inline-flex">
+            Book a Private Session
+          </button>
+          <!-- Dark / light toggle -->
+          <button id="theme-toggle" class="relative flex h-8 w-8 items-center justify-center rounded-full border border-slate-500/60 bg-slate-900/40 text-amber-300 shadow-inner shadow-slate-900/80 transition hover:border-teal-300/70" aria-label="Toggle light and dark mode">
+            <span id="theme-icon">☾</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="mt-10">
-
+  <!-- MAIN -->
+  <main id="home" class="mx-auto max-w-6xl px-4 pb-20 pt-10 md:pt-16">
     <!-- Hero -->
-    <section id="hero" class="relative overflow-hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-        <div class="space-y-6">
-          <p class="inline-block bg-seafoam/80 text-warmnavy px-3 py-1 rounded-full text-sm font-semibold shadow-sm">Board‑Certified Pediatric Dentists</p>
-
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold leading-tight">Gentle, Board‑Certified Pediatric Dental Care <span class="text-teal">in Northwest Houston</span></h1>
-
-          <p class="text-gray-600 max-w-xl text-lg">Specializing in pediatric dentistry, sedation and hospital dentistry — making visits calm, safe and friendly for infants, kids and teens. Now accepting new patients.</p>
-
-          <div class="flex flex-wrap gap-3 mt-4">
-           
-
-            <a href="tel:832-427-1901" class="inline-flex items-center gap-2 px-4 py-3 rounded-full border border-gray-200 bg-white shadow-sm hover:shadow-lg transition">Call 832‑427‑1901</a>
-          </div>
-
-          <div class="mt-6 text-sm text-gray-500">17440 FM 529 Rd, Houston, TX • Mon–Fri 9am–6pm • Sat 9am–5pm</div>
-
-          <div class="mt-4 text-sm">
-            <a href="mnt/data/referral-form.pdf" class="text-teal underline" download>Download Patient Referral Form</a>
-          </div>
+    <section class="grid gap-10 md:grid-cols-2 md:items-center anim-fade-up">
+      <div class="space-y-6 text-center md:text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-teal-300/80">
+          Since 2001 · Ashburn, VA &amp; Online
+        </p>
+        <h1 class="text-3xl font-semibold leading-tight text-slate-50 md:text-5xl">
+          For Body, Mind &amp;
+          <span class="bg-gradient-to-r from-purple-300 via-indigo-200 to-teal-200 bg-clip-text text-transparent">
+            Freeing Your Spirit!
+          </span>
+        </h1>
+        <p class="text-base text-slate-200/90 md:text-lg">
+          <span class="italic text-teal-200/90">Dear Seeker: I’ve been waiting for you.</span>
+          If you’re here, you’re seeking something more—peace of mind, joy, love, meaning, better health, a deeper spiritual connection.
+          You don’t have to walk this path alone.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button class="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-6 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_0_30px_rgba(88,101,242,0.6)] transition-transform hover:-translate-y-0.5">
+            <span class="relative z-10">Book a Private Session</span>
+            <span class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-teal-200/60 to-amber-200/40 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"></span>
+          </button>
+          <button class="rounded-full border border-teal-300/60 bg-slate-900/30 px-5 py-2.5 text-sm font-medium text-teal-100 backdrop-blur-md transition hover:bg-slate-800/60">
+            Schedule a Free Clarity Call
+          </button>
         </div>
-
-        <div class="relative flex items-center justify-center">
-          <!-- Slideshow / Carousel -->
-          <div id="hero-carousel" class="w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl relative">
-            <div class="carousel-slide ">
-              <img src="mnt/data/dental-clinics-of-texas-1.jpg.webp" alt="Clinic exterior" class="w-full h-80 object-cover">
-            </div>
-            <div class="carousel-slide hidden">
-              <img src="mnt/data/pexels-fr3nks-287237.jpg" alt="Dental operatory" class="w-full h-80 object-cover">
-            </div>
-            <div class="carousel-slide hidden">
-              <img src="mnt/data/pexels-shvetsa-3845843.jpg" alt="Smiling patient" class="w-full h-80 object-cover">
-            </div>
-            <div class="carousel-slide hidden">
-              <img src="mnt/data/pexels-olly-3779705.jpg" alt="Dentist at work" class="w-full h-80 object-cover">
-            </div>
-            
-            
-
-            <!-- Controls -->
-            <button id="prev-slide" aria-label="Previous" class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow">‹</button>
-            <button id="next-slide" aria-label="Next" class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow">›</button>
-
-            <!-- Indicators -->
-            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-              <button class="w-2 h-2 rounded-full bg-white/60 carousel-dot" data-index="0"></button>
-              <button class="w-2 h-2 rounded-full bg-white/40 carousel-dot" data-index="1"></button>
-              <button class="w-2 h-2 rounded-full bg-white/40 carousel-dot" data-index="2"></button>
-              <button class="w-2 h-2 rounded-full bg-white/40 carousel-dot" data-index="3"></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- wavy SVG separator -->
-      <div class="mt-6">
-        <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg"><path fill="#FBFCFD" d="M0,96L120,106.7C240,117,480,139,720,149.3C960,160,1200,160,1320,160L1440,160L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z"></path></svg>
-      </div>
-
-      <script>
-        (function(){
-          const slides = document.querySelectorAll('#hero-carousel .carousel-slide');
-          const dots = document.querySelectorAll('#hero-carousel .carousel-dot');
-          let idx = 0;
-          function show(i) {
-            slides.forEach((s,si)=> s.classList.toggle('hidden', si !== i));
-            dots.forEach((d,di)=> d.classList.toggle('bg-white/60', di === i));
-            idx = i;
-          }
-          document.getElementById('prev-slide').addEventListener('click', () => show((idx-1+slides.length)%slides.length));
-          document.getElementById('next-slide').addEventListener('click', () => show((idx+1)%slides.length));
-          dots.forEach(d => d.addEventListener('click', (e) => show(Number(e.currentTarget.dataset.index))));
-
-          // Auto-advance
-          let auto = setInterval(() => show((idx+1)%slides.length), 5000);
-          // pause on hover
-          const carousel = document.getElementById('hero-carousel');
-          carousel.addEventListener('mouseenter', () => clearInterval(auto));
-          carousel.addEventListener('mouseleave', () => auto = setInterval(() => show((idx+1)%slides.length), 5000));
-        })();
-      </script>
-    </section>
-
-    <!-- Quick Services with animated cards -->
-    <section id="services" class="bg-gradient-to-b from-white to-offwhite py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-2xl font-heading font-semibold">Quick Services</h2>
-            <p class="mt-1 text-gray-600">Common services for infants, children and teens — explained simply for parents.</p>
-          </div>
-          <div class="hidden sm:flex gap-3 text-xs text-gray-500">
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-teal"></span> Pediatric Experts</div>
-            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-coral"></span> Sedation & Hospital</div>
-          </div>
-        </div>
-
-        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          <!-- Animated service cards -->
-          <div class="p-5 rounded-2xl bg-white shadow hover:shadow-2xl transform transition hover:-translate-y-2 reveal" data-reveal>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-teal to-seafoam text-white flex items-center justify-center font-semibold animate-float">🪥</div>
-              <div>
-                <div class="font-semibold">Preventive Care</div>
-                <div class="text-sm text-gray-500 mt-1">Cleanings, fluoride & exams for healthy growth.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-5 rounded-2xl bg-white shadow hover:shadow-2xl transform transition hover:-translate-y-2 reveal" data-reveal>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-coral to-teal text-white flex items-center justify-center font-semibold animate-float">🛡️</div>
-              <div>
-                <div class="font-semibold">Crowns</div>
-                <div class="text-sm text-gray-500 mt-1">Protective crowns for young teeth.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-5 rounded-2xl bg-white shadow hover:shadow-2xl transform transition hover:-translate-y-2 reveal" data-reveal>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-teal to-coral text-white flex items-center justify-center font-semibold animate-float">🪄</div>
-              <div>
-                <div class="font-semibold">SMART Fillings</div>
-                <div class="text-sm text-gray-500 mt-1">Minimally invasive restorations.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-5 rounded-2xl bg-white shadow hover:shadow-2xl transform transition hover:-translate-y-2 reveal" data-reveal>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-seafoam to-teal text-warmnavy flex items-center justify-center font-semibold animate-float">💤</div>
-              <div>
-                <div class="font-semibold">Oral Sedation</div>
-                <div class="text-sm text-gray-500 mt-1">Gentle options for anxious or special‑needs patients.</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-5 rounded-2xl bg-white shadow hover:shadow-2xl transform transition hover:-translate-y-2 reveal" data-reveal>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-warmnavy to-coral text-white flex items-center justify-center font-semibold animate-float">🚑</div>
-              <div>
-                <div class="font-semibold">Emergency Care</div>
-                <div class="text-sm text-gray-500 mt-1">Quick, compassionate treatment for injuries & pain.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Why Choose Us with subtle staggered animations -->
-    <section class="py-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        <div class="space-y-4">
-          <h3 class="text-2xl font-heading font-semibold">Why parents choose us</h3>
-          <p class="text-gray-600">Pediatric specialists, behavior guidance, modern technology and a calm, friendly atmosphere — designed to keep kids smiling.</p>
-
-          <ul class="mt-4 space-y-4">
-            <li class="flex gap-3 items-start reveal" data-reveal>
-              <div class="w-10 h-10 rounded-lg bg-teal text-white flex items-center justify-center font-semibold">1</div>
-              <div>
-                <div class="font-medium">Pediatric Specialists</div>
-                <div class="text-sm text-gray-500">Dentists trained specifically for children's dental development and behavior.</div>
-              </div>
-            </li>
-
-            <li class="flex gap-3 items-start reveal" data-reveal>
-              <div class="w-10 h-10 rounded-lg bg-seafoam text-warmnavy flex items-center justify-center font-semibold">2</div>
-              <div>
-                <div class="font-medium">Comfort-forward Care</div>
-                <div class="text-sm text-gray-500">Distraction, sedation, and parental support to reduce anxiety.</div>
-              </div>
-            </li>
-
-            <li class="flex gap-3 items-start reveal" data-reveal>
-              <div class="w-10 h-10 rounded-lg bg-coral text-white flex items-center justify-center font-semibold">3</div>
-              <div>
-                <div class="font-medium">Safety & Technology</div>
-                <div class="text-sm text-gray-500">Digital x-rays, strict sterilization, and hospital coordination.</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div class="p-6 rounded-2xl bg-gradient-to-tr from-white to-offwhite shadow-lg reveal" data-reveal>
-            <h4 class="font-semibold">Sedation & Hospital Dentistry</h4>
-            <p class="mt-2 text-sm text-gray-600">We coordinate with hospitals for complex cases and provide clear pre/post op instructions with caregiver support.</p>
-          </div>
-
-          <div class="p-6 rounded-2xl bg-gradient-to-tr from-white to-offwhite shadow-lg reveal" data-reveal>
-            <h4 class="font-semibold">Special Needs Care</h4>
-            <p class="mt-2 text-sm text-gray-600">Experienced providers who adapt visits for sensory, developmental, or medical needs.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Meet the Team with 3D tilt effect on hover -->
-    <section id="team" class="bg-gradient-to-b from-offwhite to-white py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-heading font-semibold">Meet the Team</h2>
-        <p class="mt-2 text-gray-600">Board-certified pediatric dentists and caring staff here to help your child smile.</p>
-
-        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-          <!-- Dr. Yunus Langha -->
-          <div class="relative group">
-            <div class="p-6 rounded-2xl bg-white shadow-lg transform transition duration-500 group-hover:-translate-y-3 group-hover:scale-102">
-              <div class="w-28 h-28 rounded-full mx-auto overflow-hidden shadow-md">
-                <img src="mnt/data/doctor-langha.jpg.webp" alt="Dr. Yunus Langha" class="w-full h-full object-cover">
-              </div>
-              <h3 class="mt-4 text-center font-medium">Dr. Yunus Langha</h3>
-              <p class="text-sm text-teal text-center font-semibold">Pediatric Dentist — Diplomate, American Board of Pediatric Dentistry</p>
-
-              <div class="mt-3 text-sm text-gray-600 max-h-28 overflow-hidden transition-all duration-300" id="bio-langha">
-                Dr. Yunus Langha graduated from Dental School in 2002. He received a Master’s degree in Public Health and completed a Dental General Practice Residency (GPR) at Western Reserve. To further specialize in Pediatric Dentistry, he completed a two-year residency in Pediatric Dentistry at Louisiana State University School of Dentistry in New Orleans, where he also served as Chief Resident.
-              </div>
-
-              <div class="mt-4 text-center">
-                <button aria-expanded="false" class="text-sm text-teal font-semibold px-3 py-2 rounded-full border border-teal/20 hover:bg-teal/5" data-toggle="bio-langha">Read more</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dr. James Stamper -->
-          <div class="relative group">
-            <div class="p-6 rounded-2xl bg-white shadow-lg transform transition duration-500 group-hover:-translate-y-3 group-hover:scale-102">
-              <div class="w-28 h-28 rounded-full mx-auto overflow-hidden shadow-md">
-                <img src="mnt/data/James_Stamper_DDS.webp" alt="Dr. James Stamper" class="w-full h-full object-cover">
-              </div>
-              <h3 class="mt-4 text-center font-medium">Dr. James Stamper</h3>
-              <p class="text-sm text-teal text-center font-semibold">Pediatric Dentist — Member, American Academy of Pediatric Dentistry</p>
-
-              <div class="mt-3 text-sm text-gray-600 max-h-28 overflow-hidden transition-all duration-300" id="bio-stamper">
-                Dr. James Stamper is a highly experienced pediatric dentist and native Texan from San Antonio. He completed undergraduate studies in zoology and chemistry at the University of Texas at Austin and earned his dental degree from the University of Texas Dental Branch at Houston.
-              </div>
-
-              <div class="mt-4 text-center">
-                <button aria-expanded="false" class="text-sm text-teal font-semibold px-3 py-2 rounded-full border border-teal/20 hover:bg-teal/5" data-toggle="bio-stamper">Read more</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dr. Glenn Banks -->
-          <div class="relative group">
-            <div class="p-6 rounded-2xl bg-white shadow-lg transform transition duration-500 group-hover:-translate-y-3 group-hover:scale-102">
-              <div class="w-28 h-28 rounded-full mx-auto overflow-hidden shadow-md">
-                <img src="mnt/data/dr_banks-199x300.jpg.webp" alt="Dr. Glenn Banks" class="w-full h-full object-cover">
-              </div>
-              <h3 class="mt-4 text-center font-medium">Dr. Glenn Banks, DDS</h3>
-              <p class="text-sm text-teal text-center font-semibold">General & Cosmetic Dentistry — Pediatric frenectomy specialist</p>
-
-              <div class="mt-3 text-sm text-gray-600 max-h-28 overflow-hidden transition-all duration-300" id="bio-banks">
-                Dr. Glenn Banks graduated from Indiana University School of Dentistry in 2005. He is trained in cosmetic and laser dentistry and is a preferred provider for LUMINEERS®.
-              </div>
-
-              <div class="mt-4 text-center">
-                <button aria-expanded="false" class="text-sm text-teal font-semibold px-3 py-2 rounded-full border border-teal/20 hover:bg-teal/5" data-toggle="bio-banks">Read more</button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <script>
-        // Expand/collapse bios with ARIA updates
-        document.querySelectorAll('[data-toggle]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-toggle');
-            const el = document.getElementById(id);
-            if (!el) return;
-            const expanded = btn.getAttribute('aria-expanded') === 'true';
-            if (!expanded) {
-              // set full content for each bio (populate long text when expanded)
-              if (id === 'bio-langha') {
-                el.innerHTML = `Dr. Yunus Langha graduated from Dental School in 2002. He received a Master's degree in Public Health and completed a Dental General Practice Residency (GPR) at Western Reserve. To further specialize in Pediatric Dentistry, he completed a two-year residency in Pediatric Dentistry at Louisiana State University School of Dentistry in New Orleans, where he also served as Chief Resident.<br><br>Dr. Langha has served as a Pediatric Dentist at South Texas Dental since 2008 and achieved Diplomate status with the American Board of Pediatric Dentistry in 2010. His specialty is Hospital Pediatric Dentistry, treating very young patients with extensive dental needs under general anesthesia. He holds hospital privileges at Houston Children's Dental, Texas Children's Hospital and West Houston Medical Center.<br><br>Dr. Langha is a member of the American Academy of Pediatric Dentistry, American Dental Association, Texas Dental Association, Greater Houston Dental Society and Houston Academy of Pediatric Dentistry. He is board-certified and has several research publications in peer-reviewed journals.`;
-              }
-              if (id === 'bio-stamper') {
-                el.innerHTML = `Dr. James Stamper completed undergraduate studies in zoology and chemistry at the University of Texas at Austin and earned his dental degree from the University of Texas Dental Branch at Houston in 1977. He completed a pediatric dental residency at Texas Children's Hospital in 1979 and established his private practice in Southwest Houston in 1982. Dr. Stamper has served on staff at Texas Children's Hospital and Memorial Hermann Southwest Hospital for over 25 years and is active in multiple professional organizations. Outside of dentistry he enjoys time with family, the outdoors and folk art.`;
-              }
-              if (id === 'bio-banks') {
-                el.innerHTML = `Dr. Glenn Banks graduated from Indiana University School of Dentistry in 2005. He is board-certified and is a member of the American Dental Association, Texas Dental Association, Greater Houston Dental Association and the Academy of General Dentistry. Dr. Banks is skilled in modern dental technologies including cosmetic and laser dentistry, is a trained provider for LUMINEERS®, and performs pediatric frenectomy procedures for tongue-tie and lip-tie.`;
-              }
-
-              el.style.maxHeight = el.scrollHeight + 'px';
-              btn.setAttribute('aria-expanded', 'true');
-              btn.textContent = 'Show less';
-            } else {
-              // collapse back to intro
-              if (id === 'bio-langha') {
-                el.innerHTML = `Dr. Yunus Langha graduated from Dental School in 2002. He received a Master’s degree in Public Health and completed a Dental General Practice Residency (GPR) at Western Reserve. To further specialize in Pediatric Dentistry, he completed a two-year residency in Pediatric Dentistry at Louisiana State University School of Dentistry in New Orleans, where he also served as Chief Resident.`;
-              }
-              if (id === 'bio-stamper') {
-                el.innerHTML = `Dr. James Stamper is a highly experienced pediatric dentist and native Texan from San Antonio. He completed undergraduate studies in zoology and chemistry at the University of Texas at Austin and earned his dental degree from the University of Texas Dental Branch at Houston.`;
-              }
-              if (id === 'bio-banks') {
-                el.innerHTML = `Dr. Glenn Banks graduated from Indiana University School of Dentistry in 2005. He is trained in cosmetic and laser dentistry and is a preferred provider for LUMINEERS®.`;
-              }
-
-              el.style.maxHeight = '6.75rem';
-              btn.setAttribute('aria-expanded', 'false');
-              btn.textContent = 'Read more';
-            }
-          });
-        });
-        // initialize collapsed state
-        ['bio-langha','bio-stamper','bio-banks'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.maxHeight = '6.75rem';
-        });
-      </script>
-    </section>
-
-    <!-- Services Detail Grid (animated) -->
-    <section class="py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-heading font-semibold">Our Services</h2>
-        <p class="mt-2 text-gray-600">From preventive visits to hospital dentistry — comprehensive care for children of all ages.</p>
-
-        <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Preventive Care & Sealants</h3>
-            <p class="mt-2 text-sm text-gray-600">Cleanings, fluoride and sealants to protect young smiles.</p>
-          </article>
-
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Minimally Invasive Dentistry</h3>
-            <p class="mt-2 text-sm text-gray-600">SMART fillings and techniques that preserve healthy tooth structure.</p>
-          </article>
-
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Crowns & Restorations</h3>
-            <p class="mt-2 text-sm text-gray-600">Pediatric crowns for decay, trauma and developmental needs.</p>
-          </article>
-
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Emergency & Trauma Care</h3>
-            <p class="mt-2 text-sm text-gray-600">Urgent care for dental injuries and pain relief.</p>
-          </article>
-
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Special Needs & Behavior Support</h3>
-            <p class="mt-2 text-sm text-gray-600">Adapted visits and longer appointment times for comfortable care.</p>
-          </article>
-
-          <article class="p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition reveal" data-reveal>
-            <h3 class="font-medium">Hospital Dentistry (OR)</h3>
-            <p class="mt-2 text-sm text-gray-600">Coordination for hospital-based treatment under general anesthesia when required.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Patient Resources -->
-    <section id="resources" class="bg-gradient-to-b from-offwhite to-white py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        <div>
-          <h2 class="text-2xl font-heading font-semibold">Patient Resources</h2>
-          <p class="mt-2 text-gray-600">Download forms, review post-op instructions and learn about payment options.</p>
-
-          <ul class="mt-4 space-y-2">
-            <li><a href="#" class="text-teal underline">Patient Forms (PDF)</a></li>
-            
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="font-medium">Frequently Asked</h3>
-          <dl class="mt-3 space-y-3 text-sm">
-            <div>
-              <dt class="font-medium">Do you accept new patients?</dt>
-              <dd class="text-gray-600">Yes — we welcome infants through teens and accept most major insurances.</dd>
-            </div>
-
-            <div>
-              <dt class="font-medium">What sedation options are available?</dt>
-              <dd class="text-gray-600">We offer oral sedation and coordinate hospital/general anesthesia for complex cases.</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== REPLACE Testimonials Section with this improved block ====== -->
-<section id="testimonials-booking" class="py-12 bg-gradient-to-br from-seafoam/10 to-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <h2 class="text-2xl font-heading font-semibold">What parents say</h2>
-        <p class="mt-1 text-gray-600">Real feedback from families — we listen, care, and deliver gentle pediatric dentistry.</p>
-      </div>
-
-      <!-- Book button (opens modal) -->
-      <div>
-        <button id="open-booking" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal to-seafoam text-warmnavy font-semibold shadow-lg hover:scale-105 transition">
-          📅 Book an Appointment
+        <button class="text-sm text-slate-300/90 underline-offset-4 hover:text-teal-200 hover:underline">
+          New to Yoga or Meditation? Start Here
         </button>
       </div>
-    </div>
 
-    <!-- Carousel wrapper -->
-    <div class="mt-6 relative">
-      <div id="reviews-viewport" class="overflow-hidden">
-        <div id="reviews-track" class="flex transition-transform duration-500 will-change-transform">
-          <!-- Slide 1 -->
-          <div class="p-3 min-w-full sm:min-w-1/2 lg:min-w-1/3">
-            <div class="p-6 bg-white rounded-2xl shadow-lg h-full">
-              <div class="flex items-start gap-3">
-                <div class="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center text-teal font-semibold">SP</div>
-                <div>
-                  <div class="font-medium">Sarah P.</div>
-                  <div class="text-xs text-gray-400">Google review</div>
-                </div>
+      <!-- Hero right: Luann image + card -->
+      <div class="relative flex justify-center md:justify-end">
+        <div class="relative w-full max-w-sm">
+          <div class="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-gradient-to-tr from-teal-300/40 via-sky-400/40 to-purple-400/40 blur-3xl"></div>
+          <div class="absolute -bottom-10 -left-8 h-24 w-24 rounded-full bg-gradient-to-tr from-purple-500/35 via-indigo-400/30 to-amber-300/30 blur-3xl"></div>
+
+          <div class="relative z-10 space-y-4 rounded-3xl border border-slate-500/50 bg-slate-900/60 p-5 shadow-xl shadow-indigo-900/60 backdrop-blur-xl">
+            <!-- IMAGE FROM USER -->
+            <div class="overflow-hidden rounded-2xl border border-slate-600/70 bg-slate-800/80">
+              <!-- Replace src with the path/filename of your image -->
+              <img
+                src="mnt/data/rs=w_727,cg_true.webp"
+                alt="Luann guiding a student in yoga posture"
+                class="h-56 w-full object-cover"
+              />
+            </div>
+
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-50">
+                  Luann Fulbright
+                </p>
+                <p class="text-xs text-slate-300/80">
+                  Founder of Dream Yoga Studio &amp; Wellness Center
+                </p>
               </div>
-              <div class="mt-3 text-gray-700">"Wonderful staff — our son felt comfortable and the team explained everything clearly. Highly recommend for pediatric care."</div>
-              <div class="mt-4 flex items-center gap-1 text-yellow-400">★★★★★</div>
+              <span class="rounded-full bg-slate-800/80 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-teal-200">
+                Guide for Seekers
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-200/85">
+              Spiritual teacher, yoga therapist, dream interpreter, hospice volunteer and end-of-life doula, guiding seekers
+              since 1975 to live consciously, fully, and with meaning.
+            </p>
+
+            <div class="flex flex-wrap gap-2 text-[10px]">
+              <span class="rounded-full bg-slate-800/70 px-3 py-1 text-teal-200/90">Yoga &amp; Meditation</span>
+              <span class="rounded-full bg-slate-800/70 px-3 py-1 text-indigo-200/90">Dream Interpretation</span>
+              <span class="rounded-full bg-slate-800/70 px-3 py-1 text-amber-200/90">Life &amp; End-of-Life Mentoring</span>
             </div>
           </div>
-
-          <!-- Slide 2 -->
-          <div class="p-3 min-w-full sm:min-w-1/2 lg:min-w-1/3">
-            <div class="p-6 bg-white rounded-2xl shadow-lg h-full">
-              <div class="flex items-start gap-3">
-                <div class="w-12 h-12 rounded-full bg-coral/10 flex items-center justify-center text-coral font-semibold">MG</div>
-                <div>
-                  <div class="font-medium">Mark G.</div>
-                  <div class="text-xs text-gray-400">Google review</div>
-                </div>
-              </div>
-              <div class="mt-3 text-gray-700">"Handled our special needs daughter with such care. The team went above and beyond to make the visit comfortable."</div>
-              <div class="mt-4 flex items-center gap-1 text-yellow-400">★★★★★</div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="p-3 min-w-full sm:min-w-1/2 lg:min-w-1/3">
-            <div class="p-6 bg-white rounded-2xl shadow-lg h-full">
-              <div class="flex items-start gap-3">
-                <div class="w-12 h-12 rounded-full bg-warmnavy/10 flex items-center justify-center text-warmnavy font-semibold">PN</div>
-                <div>
-                  <div class="font-medium">Priya N.</div>
-                  <div class="text-xs text-gray-400">Google review</div>
-                </div>
-              </div>
-              <div class="mt-3 text-gray-700">"Professional, gentle and patient. Best pediatric dentist in Houston — our family trusts them completely."</div>
-              <div class="mt-4 flex items-center gap-1 text-yellow-400">★★★★★</div>
-            </div>
-          </div>
-
-          <!-- (Add more slides here if needed) -->
-        </div>
-      </div>
-
-      <!-- Controls -->
-      <button id="rev-prev" aria-label="Previous review" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow">‹</button>
-      <button id="rev-next" aria-label="Next review" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow">›</button>
-    </div>
-  </div>
-</section>
-
-<!-- ====== Calendly Booking Modal (INLINE) ====== -->
-<!-- Include Calendly CSS and JS (recommended in head, but added here so copy-paste works) -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" defer></script>
-
-<!-- Booking modal (uses Calendly inline widget) -->
-<div id="booking-modal" class="fixed inset-0 z-60 hidden items-center justify-center bg-black/50 p-4">
-  <div class="w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl">
-    <div class="flex items-center justify-between p-4 border-b">
-      <h3 class="font-semibold">Book an Appointment</h3>
-      <div class="flex items-center gap-2">
-        <!-- Referral download kept -->
-        <a href="mnt/data/referral-form.pdf" class="text-sm text-teal underline mr-4" download>Download Referral (PDF)</a>
-        <button id="close-booking" class="px-3 py-1 rounded-md bg-gray-100 hover:bg-gray-200">Close</button>
-      </div>
-    </div>
-
-    <!-- Calendly inline widget: replace data-url with your Calendly event URL -->
-    <div class="w-full h-[720px]">
-      <div class="calendly-inline-widget" data-url="https://calendly.com/aceofstyle10/appointment" style="min-width:320px;height:100%;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ====== Optional: Open Calendly as POPUP instead of inline ====== -->
-<!-- If you prefer to open a Calendly popup widget (not inline), use this snippet instead of the inline widget above:
-<script>
-  // Example to open popup (replace with your URL)
-  Calendly.initPopupWidget({url: 'https://calendly.com/your-clinic/30min'});
-</script>
--->
-
-<script>
-(function(){
-  // Modal open/close (keeps same behavior as prior modal)
-  const openBooking = document.getElementById('open-booking'); // existing button that opens modal
-  const closeBooking = document.getElementById('close-booking');
-  const bookingModal = document.getElementById('booking-modal');
-
-  openBooking?.addEventListener('click', (e) => {
-    e.preventDefault();
-    // If you prefer a popup instead of the inline modal, uncomment the next line and comment out the modal open lines:
-    // Calendly.initPopupWidget({url: 'https://calendly.com/your-clinic/30min'}); return;
-
-    bookingModal.classList.remove('hidden');
-    bookingModal.classList.add('flex');
-    // Accessiblity: focus into modal
-    bookingModal.querySelector('button, a, iframe, .calendly-inline-widget')?.focus({preventScroll: true});
-  });
-
-  closeBooking?.addEventListener('click', () => {
-    bookingModal.classList.add('hidden');
-    bookingModal.classList.remove('flex');
-    // if Calendly popup was used, you can call Calendly.closePopupWidget(); (Calendly exposes that)
-  });
-
-  // close on overlay click
-  bookingModal?.addEventListener('click', (ev) => {
-    if (ev.target === bookingModal) {
-      bookingModal.classList.add('hidden');
-      bookingModal.classList.remove('flex');
-    }
-  });
-
-  // Escape closes
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && bookingModal && !bookingModal.classList.contains('hidden')) {
-      bookingModal.classList.add('hidden');
-      bookingModal.classList.remove('flex');
-    }
-  });
-})();
-</script>
-
-
-<!-- ====== STICKY WhatsApp CONTACT BUTTON (bottom-right) ====== -->
-<a id="whatsapp-button" href="https://wa.me/18324271901?text=Hello%20Dental%20Clinics%20of%20Texas%20-%20I%20want%20to%20book%20an%20appointment" target="_blank" rel="noopener noreferrer"
-   class="fixed z-70 right-6 bottom-6 md:right-10 md:bottom-10 flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-teal to-seafoam text-warmnavy font-semibold shadow-lg hover:scale-105 transition"
-   title="Message us on WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.88 11.88 0 0 0 12 .5 11.82 11.82 0 0 0 .75 13.8l.01.95L1.9 19l4.35-1.14.95.01A11.86 11.86 0 0 0 24 12c0-1.86-.44-3.6-1.28-5.17l-2.2-3.35zM12 21c-1.9 0-3.73-.5-5.33-1.45l-.38-.22-2.57.67.69-2.47-.25-.4A9.17 9.17 0 1 1 21.17 12 9.1 9.1 0 0 1 12 21z"/><path d="M16.67 14.9c-.3-.15-1.79-.88-2.07-.98-.28-.1-.48-.15-.69.15-.2.3-.78.98-.96 1.18-.18.2-.36.22-.66.07-.3-.15-1.25-.46-2.38-1.46-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.12-.61.12-.12.28-.31.42-.46.14-.15.18-.25.28-.42.09-.18.04-.34-.02-.49-.07-.17-.69-1.67-.95-2.29-.25-.6-.5-.52-.69-.53l-.59-.01c-.2 0-.52.07-.79.34-.28.27-1.06 1.04-1.06 2.53 0 1.48.5 2.92 1.14 4.06.63 1.12 2.79 4.66 6.77 5.93 1.12.34 1.99.54 2.67.69.89.2 1.7.17 2.34.1.71-.08 1.79-.73 2.04-1.43.26-.7.26-1.29.18-1.43-.08-.14-.28-.22-.58-.37z"/></svg>
-  Message / Book
-</a>
-
-<!-- ====== Script: Robust carousel + booking modal logic ====== -->
-<script>
-(function(){
-  // ---------- Testimonials carousel (robust) ----------
-  const viewport = document.getElementById('reviews-viewport');
-  const track = document.getElementById('reviews-track');
-  const slides = Array.from(track.children);
-  const prevBtn = document.getElementById('rev-prev');
-  const nextBtn = document.getElementById('rev-next');
-  let index = 0;
-
-  // compute slide width depending on viewport and responsive min-widths
-  function getSlideWidth() {
-    // slide element widths already account for padding; just measure first child
-    return slides[0].getBoundingClientRect().width;
-  }
-
-  function updatePos() {
-    const w = getSlideWidth();
-    track.style.transform = 'translateX(-' + (index * w) + 'px)';
-  }
-
-  prevBtn.addEventListener('click', () => {
-    index = Math.max(0, index - 1);
-    updatePos();
-  });
-  nextBtn.addEventListener('click', () => {
-    index = Math.min(slides.length - 1, index + 1);
-    updatePos();
-  });
-
-  // auto-advance
-  let auto = setInterval(() => {
-    index = (index + 1) % slides.length;
-    updatePos();
-  }, 5000);
-  track.addEventListener('mouseenter', () => clearInterval(auto));
-  track.addEventListener('mouseleave', () => auto = setInterval(() => {
-    index = (index + 1) % slides.length;
-    updatePos();
-  }, 5000));
-
-  // on resize recompute
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    // small debounce to ensure layout stabilizes
-    resizeTimer = setTimeout(() => {
-      // cap index to available slides (helps when layout switches)
-      index = Math.min(index, slides.length - 1);
-      updatePos();
-    }, 120);
-  });
-
-  // initialize transform
-  window.requestAnimationFrame(updatePos);
-
-  // ---------- Booking modal logic ----------
-  const openBooking = document.getElementById('open-booking');
-  const closeBooking = document.getElementById('close-booking');
-  const bookingModal = document.getElementById('booking-modal');
-
-  openBooking.addEventListener('click', () => {
-    bookingModal.classList.remove('hidden');
-    bookingModal.classList.add('flex');
-    // focus management
-    bookingModal.querySelector('button, a, iframe').focus({preventScroll: true});
-  });
-  closeBooking.addEventListener('click', () => {
-    bookingModal.classList.add('hidden');
-    bookingModal.classList.remove('flex');
-  });
-  // close on overlay click (but not when clicking inside modal content)
-  bookingModal.addEventListener('click', (e) => {
-    if (e.target === bookingModal) {
-      bookingModal.classList.add('hidden');
-      bookingModal.classList.remove('flex');
-    }
-  });
-
-  // Escape key closes modal
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && bookingModal && !bookingModal.classList.contains('hidden')) {
-      bookingModal.classList.add('hidden');
-      bookingModal.classList.remove('flex');
-    }
-  });
-
-  // ---------- Accessibility: reduced motion preference ----------
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    clearInterval(auto);
-    track.style.transition = 'none';
-  }
-})();
-</script>
-
-
-    <!-- Hospital Dentistry -->
-    <section class="bg-white py-12 border-t border-b border-gray-100">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-        <div>
-          <h3 class="text-2xl font-heading font-semibold">Hospital Dentistry & Referrals</h3>
-          <p class="mt-2 text-gray-600">We partner with local hospitals to provide safe, coordinated care under general anesthesia when needed. Referral forms and clear instructions provided to referring physicians.</p>
-          <a href="#contact" class="mt-4 inline-block text-teal underline">Referral & contact form</a>
-        </div>
-
-        <div class="rounded-2xl overflow-hidden shadow-lg">
-          <img src="mnt/data/pexels-pixabay-52527.jpg" alt="Hospital operating room" class="w-full h-56 object-cover">
         </div>
       </div>
     </section>
 
-    <!-- Contact / Map -->
-    <section id="contact" class="py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-1 p-6 bg-gradient-to-tr from-white to-offwhite rounded-2xl shadow">
-          <h3 class="font-semibold">Dental Clinics of Texas</h3>
-          <p class="mt-2 text-sm text-gray-600">17440 FM 529 Rd, Houston, TX 77095</p>
-          <p class="mt-2 text-sm text-gray-600">Phone: <a href="tel:832-427-1901" class="text-teal">832‑427‑1901</a></p>
-          <p class="mt-2 text-sm text-gray-600">Hours: Mon–Fri 9am–6pm • Sat 9am–5pm • Sun Closed</p>
-
-          <div class="mt-4 flex gap-3">
-            <a href="https://bookit.dentrixascend.com" class="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-teal to-seafoam text-warmnavy font-semibold shadow">Book Online</a>
-            <a href="#" class="inline-block px-4 py-2 rounded-full border border-gray-200">Referral</a>
-          </div>
+    <!-- Scroll indicator -->
+    <div class="mt-12 flex items-center justify-center anim-fade-up">
+      <div class="flex flex-col items-center gap-2 text-xs text-slate-400">
+        <span>Scroll to Begin Your Journey</span>
+        <div class="h-8 w-4 rounded-full border border-slate-500/70 p-1 flex items-start justify-center overflow-hidden">
+          <div id="scroll-dot" class="h-2 w-1 rounded-full bg-teal-300/90"></div>
         </div>
+      </div>
+    </div>
 
-        <div class="lg:col-span-2 rounded-2xl overflow-hidden border border-gray-100">
-          <iframe class="w-full h-64" frameborder="0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=17440%20FM%20529%20Rd%20Houston%20TX&t=&z=15&ie=UTF8&iwloc=&output=embed" aria-label="Clinic map"></iframe>
+    <!-- Dear Seeker / About Preview -->
+    <section id="about" class="mt-20 grid gap-10 md:grid-cols-[1.4fr,1fr] anim-fade-up">
+      <div class="space-y-4 text-center md:text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-teal-300/80">
+          Dear Seeker
+        </p>
+        <h2 class="text-2xl font-semibold text-slate-50 md:text-3xl">
+          You&apos;re ready for something more.
+        </h2>
+        <p class="text-sm text-slate-200/90 md:text-base">
+          Maybe your body is asking for relief. Maybe your mind is overwhelmed. Maybe your heart is longing for connection,
+          meaning, or peace. For decades, Luann has drawn on yoga, meditation, breathwork, dream interpretation, Reiki, and
+          Ayurveda to support people just like you.
+        </p>
+        <p class="text-sm text-slate-200/90 md:text-base">
+          As a hospice volunteer and end-of-life doula, she is deeply committed to helping you live—and eventually die—consciously,
+          with as much grace, clarity, and love as possible.
+        </p>
+        <button class="text-sm text-teal-200 underline-offset-4 hover:underline">
+          Read Luann&apos;s Full Story →
+        </button>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-purple-500/25 via-indigo-500/25 to-teal-400/25 blur-xl"></div>
+        <div class="relative space-y-4 rounded-3xl border border-slate-500/50 bg-slate-900/50 p-6 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+          <p class="text-xs font-medium uppercase tracking-[0.15em] text-slate-300/90 text-center">
+            Dream Yoga in Numbers
+          </p>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="text-center">
+              <p class="text-xs text-slate-400">Practicing Since</p>
+              <p class="text-lg font-semibold text-teal-200">1975</p>
+            </div>
+            <div class="text-center">
+              <p class="text-xs text-slate-400">Teaching Yoga &amp; Meditation</p>
+              <p class="text-lg font-semibold text-teal-200">2001</p>
+            </div>
+            <div class="text-center">
+              <p class="text-xs text-slate-400">Dream Yoga Studio Founded</p>
+              <p class="text-lg font-semibold text-teal-200">2002</p>
+            </div>
+            <div class="text-center">
+              <p class="text-xs text-slate-400">GMU For-Credit Yoga Program</p>
+              <p class="text-lg font-semibold text-teal-200">Creator</p>
+            </div>
+          </div>
+          <div class="mt-2 flex flex-wrap justify-center gap-2 text-[11px] text-slate-200/85">
+            <span class="rounded-full bg-slate-800/70 px-3 py-1">Body</span>
+            <span class="rounded-full bg-slate-800/70 px-3 py-1">Mind</span>
+            <span class="rounded-full bg-slate-800/70 px-3 py-1">Spirit</span>
+            <span class="rounded-full bg-slate-800/70 px-3 py-1">Dreams</span>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Feature Cards – Main Offerings -->
+    <section id="services" class="mt-20 space-y-8 anim-fade-up">
+      <div class="max-w-2xl mx-auto text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-teal-300/80">
+          Main Offerings
+        </p>
+        <h2 class="mt-2 text-2xl font-semibold text-slate-50 md:text-3xl">
+          Private sessions to support body, mind, dreams, and the journey home.
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <!-- Card 1 -->
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(45,212,191,0.35)] transition-transform">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/30 via-indigo-400/25 to-teal-300/30"></div>
+          </div>
+          <div class="relative space-y-3 text-center">
+            <div class="flex flex-col items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-800/80 text-lg">🧘‍♀️</div>
+              <h3 class="text-sm font-semibold text-slate-50">
+                Private Yoga, Yoga Therapy &amp; Meditation
+              </h3>
+            </div>
+            <p class="text-xs text-slate-200/85">
+              One-on-one practices tailored to your body, your goals, and the season of life you’re in.
+            </p>
+            <ul class="space-y-1 text-xs text-slate-200/90">
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Customized sequences &amp; breathwork</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Support for stress, pain, and mobility</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Suitable for all ages &amp; stages</span></li>
+            </ul>
+            <div class="mt-3 flex justify-center gap-3 text-xs">
+              <button class="rounded-full border border-slate-500/80 px-3 py-1 text-slate-200 hover:border-teal-300 hover:text-teal-200">
+                Learn More
+              </button>
+              <button class="rounded-full bg-gradient-to-r from-teal-300 to-amber-200 px-3 py-1 font-medium text-slate-900 shadow-md shadow-teal-400/40 hover:shadow-lg hover:shadow-amber-300/50">
+                Book a Session
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(129,140,248,0.35)] transition-transform">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/30 via-purple-400/25 to-teal-300/30"></div>
+          </div>
+          <div class="relative space-y-3 text-center">
+            <div class="flex flex-col items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-800/80 text-lg">🌙</div>
+              <h3 class="text-sm font-semibold text-slate-50">
+                Dream Interpretation
+              </h3>
+            </div>
+            <p class="text-xs text-slate-200/85">
+              Each night, your dreams bring meaningful messages. Learn how to receive and work with them.
+            </p>
+            <ul class="space-y-1 text-xs text-slate-200/90">
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Understand symbols &amp; recurring themes</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Use dreams for problem-solving &amp; insight</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Private or small group sessions</span></li>
+            </ul>
+            <div class="mt-3 flex justify-center gap-3 text-xs">
+              <button class="rounded-full border border-slate-500/80 px-3 py-1 text-slate-200 hover:border-teal-300 hover:text-teal-200">
+                Learn More
+              </button>
+              <button class="rounded-full bg-gradient-to-r from-teal-300 to-amber-200 px-3 py-1 font-medium text-slate-900 shadow-md shadow-teal-400/40 hover:shadow-lg hover:shadow-amber-300/50">
+                Book a Session
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(251,191,36,0.35)] transition-transform">
+          <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-300/30 via-purple-400/25 to-teal-300/30"></div>
+          </div>
+          <div class="relative space-y-3 text-center">
+            <div class="flex flex-col items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-800/80 text-lg">🕯️</div>
+              <h3 class="text-sm font-semibold text-slate-50">
+                Life &amp; End-of-Life Mentoring
+              </h3>
+            </div>
+            <p class="text-xs text-slate-200/85">
+              “We are all just walking each other home.” Navigate life transitions and end-of-life consciously.
+            </p>
+            <ul class="space-y-1 text-xs text-slate-200/90">
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Compassionate presence &amp; listening</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Clarify what truly matters now</span></li>
+              <li class="flex gap-2 justify-center"><span class="mt-0.5 text-teal-300">•</span><span>Support around illness &amp; end-of-life</span></li>
+            </ul>
+            <div class="mt-3 flex justify-center gap-3 text-xs">
+              <button class="rounded-full border border-slate-500/80 px-3 py-1 text-slate-200 hover:border-teal-300 hover:text-teal-200">
+                Learn More
+              </button>
+              <button class="rounded-full bg-gradient-to-r from-teal-300 to-amber-200 px-3 py-1 font-medium text-slate-900 shadow-md shadow-teal-400/40 hover:shadow-lg hover:shadow-amber-300/50">
+                Book a Session
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Journey Section (enhanced visuals + animation) -->
+    <section class="mt-20 space-y-8 anim-fade-up relative overflow-hidden">
+      <!-- dreamy background -->
+      <div class="journey-bg pointer-events-none absolute inset-0 -z-10 opacity-60">
+        <div class="absolute -left-32 top-0 h-72 w-72 rounded-full bg-gradient-to-br from-purple-500/30 via-indigo-500/20 to-teal-300/20 blur-3xl"></div>
+        <div class="absolute right-[-6rem] bottom-[-4rem] h-80 w-80 rounded-full bg-gradient-to-tr from-teal-300/20 via-sky-400/20 to-amber-200/25 blur-3xl"></div>
+      </div>
+
+      <div class="max-w-2xl relative mx-auto text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-teal-300/80">
+          Your Journey as a Seeker
+        </p>
+        <h2 class="mt-2 text-2xl font-semibold text-slate-50 md:text-3xl">
+          From feeling stuck to living aligned with your soul&apos;s purpose.
+        </h2>
+        <p class="mt-2 text-sm text-slate-300/90">
+          Each step is sacred. These stages aren&apos;t linear—they spiral. You&apos;ll return to them again and again, each time with more awareness and compassion.
+        </p>
+      </div>
+
+      <div class="relative pb-6">
+        <!-- glowing vertical timeline for large screens -->
+        <div class="hidden md:block absolute left-1/2 top-6 h-[260px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-teal-300 via-indigo-400 to-amber-300 opacity-70"></div>
+
+        <div class="grid gap-6 md:grid-cols-2 relative z-10">
+          <!-- Stage 1 -->
+          <article class="journey-card relative rounded-3xl border border-slate-700/70 bg-slate-950/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+            <div class="flex items-start gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-teal-300 to-emerald-300 text-xs font-semibold text-slate-900 shadow-lg shadow-teal-400/50">
+                01
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.16em] text-teal-300/85">
+                  Stage 1 · The Stirring
+                </p>
+                <h3 class="mt-1 text-sm font-semibold text-slate-50">Something in you whispers: “There must be more.”</h3>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-200/90">
+              Stress, discomfort, or numbness signals that your current way of living isn&apos;t sustainable. A quiet inner voice begins to call you toward change.
+            </p>
+          </article>
+
+          <!-- Stage 2 -->
+          <article class="journey-card relative rounded-3xl border border-slate-700/70 bg-slate-950/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+            <div class="flex items-start gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 text-xs font-semibold text-slate-900 shadow-lg shadow-indigo-400/50">
+                02
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.16em] text-teal-300/85">
+                  Stage 2 · The Exploration
+                </p>
+                <h3 class="mt-1 text-sm font-semibold text-slate-50">You begin to explore practices that truly nourish you.</h3>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-200/90">
+              You step onto the mat, sit in silence, notice your breath, or start tracking your dreams. Curiosity opens space for healing.
+            </p>
+          </article>
+
+          <!-- Stage 3 -->
+          <article class="journey-card relative rounded-3xl border border-slate-700/70 bg-slate-950/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+            <div class="flex items-start gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-300 to-amber-200 text-xs font-semibold text-slate-900 shadow-lg shadow-fuchsia-400/50">
+                03
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.16em] text-teal-300/85">
+                  Stage 3 · The Awakening
+                </p>
+                <h3 class="mt-1 text-sm font-semibold text-slate-50">Moments of clarity and deep peace begin to arise.</h3>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-200/90">
+              Patterns loosen. Your body feels more at home. Your dreams, intuition, and everyday life start speaking the same language.
+            </p>
+          </article>
+
+          <!-- Stage 4 -->
+          <article class="journey-card relative rounded-3xl border border-slate-700/70 bg-slate-950/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+            <div class="flex items-start gap-3">
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 to-teal-300 text-xs font-semibold text-slate-900 shadow-lg shadow-amber-300/50">
+                04
+              </div>
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.16em] text-teal-300/85">
+                  Stage 4 · Living Consciously
+                </p>
+                <h3 class="mt-1 text-sm font-semibold text-slate-50">Life feels more aligned with your soul&apos;s true rhythm.</h3>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-200/90">
+              You make choices from awareness, not habit. You meet both living and dying as part of one sacred, ongoing journey.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="mt-20 space-y-8 anim-fade-up">
+      <div class="max-w-2xl mx-auto text-center">
+        <p class="text-xs uppercase tracking-[0.2em] text-teal-300/80">
+          Testimonials
+        </p>
+        <h2 class="mt-2 text-2xl font-semibold text-slate-50 md:text-3xl">
+          What seekers share about practicing with Luann.
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <figure class="relative overflow-hidden rounded-3xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+          <p class="text-[11px] font-medium uppercase tracking-[0.12em] text-teal-300/85">
+            A wonderful guide
+          </p>
+          <p class="mt-2 text-xs text-slate-200/90">
+            “Luann embodies all the qualities one could hope for in a guide—knowledge, sincerity, light-heartedness, humility, and deep respect for her students.”
+          </p>
+          <figcaption class="mt-4 text-xs text-slate-300/90 text-center">— John W.</figcaption>
+        </figure>
+
+        <figure class="relative overflow-hidden rounded-3xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+          <p class="text-[11px] font-medium uppercase tracking-[0.12em] text-teal-300/85">
+            Sooo good!
+          </p>
+          <p class="mt-2 text-xs text-slate-200/90">
+            “A class with Luann is like getting a workout, a massage, and going to a therapist all at the same time. After class, I always feel sooo good!”
+          </p>
+          <figcaption class="mt-4 text-xs text-slate-300/90 text-center">— Pam H.</figcaption>
+        </figure>
+
+        <figure class="relative overflow-hidden rounded-3xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-slate-900/80 backdrop-blur-xl">
+          <p class="text-[11px] font-medium uppercase tracking-[0.12em] text-teal-300/85">
+            When most needed
+          </p>
+          <p class="mt-2 text-xs text-slate-200/90">
+            “During 18 months of a health challenge, her visits, calls, emails, prayers, listening, empathy, and healing energy kept me going during my most despairing moments.”
+          </p>
+          <figcaption class="mt-4 text-xs text-slate-300/90 text-center">— Kendra M.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="mt-20 anim-fade-up">
+      <div class="relative overflow-hidden rounded-3xl border border-slate-600/70 bg-slate-900/60 p-8 shadow-xl shadow-slate-900/90 backdrop-blur-xl">
+        <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-teal-300/40 via-sky-400/40 to-amber-300/40 blur-3xl"></div>
+        <div class="relative space-y-4 text-center">
+          <h2 class="text-2xl font-semibold text-slate-50">
+            Subscribe to Luann&apos;s Newsletter
+          </h2>
+          <p class="text-sm text-slate-200/90 md:text-base">
+            Receive wisdom quotes, life and end-of-life guidance, and announcements about classes and offerings.
+          </p>
+          <form class="mx-auto flex max-w-md flex-col gap-3 sm:flex-row">
+            <input type="email" placeholder="Your email address" class="flex-1 rounded-full border border-slate-600/80 bg-slate-900/70 px-4 py-2 text-sm text-slate-50 placeholder:text-slate-500 focus:border-teal-300 focus:outline-none focus:ring-1 focus:ring-teal-300" />
+            <button type="submit" class="rounded-full bg-gradient-to-r from-teal-300 via-emerald-300 to-amber-200 px-6 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-teal-400/40 hover:shadow-amber-300/50">
+              Subscribe
+            </button>
+          </form>
+          <p class="text-xs text-slate-400">
+            No spam. Just heartfelt guidance and inspiration.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Strip -->
+    <section class="mt-20 rounded-3xl border border-slate-700/70 bg-slate-900/70 p-5 text-xs text-slate-200/90 shadow-xl shadow-slate-900/80 backdrop-blur-xl anim-fade-up">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="space-y-1 text-center md:text-left">
+          <p class="font-medium text-slate-50">
+            Ready to connect with Luann?
+          </p>
+          <p class="text-slate-300/90">
+            Email is the best way to reach her. Sessions are available in-person in Ashburn, VA and online via Zoom.
+          </p>
+        </div>
+        <div class="space-y-1 text-slate-200/90 text-center md:text-right">
+          <p><span class="font-semibold text-teal-200">Email:</span> Luann@DreamYogaStudio.com</p>
+          <p><span class="font-semibold text-teal-200">Location:</span> Ashburn, VA</p>
+          <p><span class="font-semibold text-teal-200">Studio:</span> 703-448-YOGA (9642)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog placeholder -->
+    <section id="blog" class="mt-12 text-xs text-slate-500 anim-fade-up text-center">
+      Blog layout idea: featured post + card grid with categories (Yoga, Meditation, Dream Work, End-of-Life, Wisdom), “Load more” button, and a reading progress bar on article pages.
+    </section>
   </main>
 
-  <!-- Mobile bottom CTA -->
-  <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-3xl px-4 md:hidden">
-    <div class="bg-white/95 backdrop-blur-md rounded-full shadow-lg border border-gray-200 flex items-center justify-between px-4 py-2">
-      <a href="tel:832-427-1901" class="text-sm font-medium">Call 832‑427‑1901</a>
-      <a href="https://bookit.dentrixascend.com" class="px-4 py-2 rounded-full bg-gradient-to-r from-teal to-seafoam text-warmnavy text-sm font-semibold">Book</a>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="mt-12 bg-warmnavy text-offwhite">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="text-sm">© <span id="year"></span> Dental Clinics of Texas</div>
-      <div class="text-sm">Designed for families • <a href="#contact" class="underline">Contact</a></div>
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/90 py-6 text-xs text-slate-400">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 md:flex-row">
+      <div class="flex flex-col gap-1 text-center md:text-left">
+        <span class="font-medium text-slate-100">
+          Dream Yoga Studio &amp; Wellness Center
+        </span>
+        <span>Guiding seekers toward health, wholeness, and awakening.</span>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <div class="flex gap-3">
+          <a href="#home" class="hover:text-teal-300">Home</a>
+          <a href="#about" class="hover:text-teal-300">About</a>
+          <a href="#services" class="hover:text-teal-300">Services</a>
+          <a href="#blog" class="hover:text-teal-300">Blog</a>
+        </div>
+        <div class="flex gap-3">
+          <button class="h-7 w-7 rounded-full border border-slate-600/70 bg-slate-900/80 text-[11px] hover:border-teal-300 hover:text-teal-300">f</button>
+          <button class="h-7 w-7 rounded-full border border-slate-600/70 bg-slate-900/80 text-[11px] hover:border-teal-300 hover:text-teal-300">in</button>
+          <button class="h-7 w-7 rounded-full border border-slate-600/70 bg-slate-900/80 text-[11px] hover:border-teal-300 hover:text-teal-300">▶</button>
+        </div>
+      </div>
+      <div class="text-center md:text-right">
+        <span class="text-[10px]">
+          © <span id="year"></span> Dream Yoga Studio &amp; Wellness Center · Powered by Your Web Studio
+        </span>
+      </div>
     </div>
   </footer>
 
+  <!-- JS: theme toggle, GSAP animations, small interactions -->
   <script>
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
-    // Mobile menu toggle
-    const menuBtn = document.getElementById('menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn?.addEventListener('click', () => {
-      const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
-      menuBtn.setAttribute('aria-expanded', String(!expanded));
-      mobileMenu.classList.toggle('hidden');
+
+    // Dark / Light toggle with localStorage
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const root = document.documentElement;
+
+    function setTheme(isDark) {
+      if (isDark) {
+        root.classList.add('dark');
+        themeIcon.textContent = '☾';
+        localStorage.setItem('dreamyoga-theme', 'dark');
+      } else {
+        root.classList.remove('dark');
+        themeIcon.textContent = '☼';
+        localStorage.setItem('dreamyoga-theme', 'light');
+      }
+    }
+
+    // Initialize
+    const savedTheme = localStorage.getItem('dreamyoga-theme');
+    if (savedTheme === 'light') {
+      setTheme(false);
+    } else {
+      setTheme(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = !root.classList.contains('dark');
+      setTheme(isDark);
     });
 
-    // Reveal-on-scroll using IntersectionObserver
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('[data-reveal], .reveal').forEach(el => obs.observe(el));
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
 
-    // Small accessibility enhancement: prefer-reduced-motion
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (prefersReduced.matches) {
-      document.querySelectorAll('.testimonial-track').forEach(el => el.style.animation = 'none');
-      document.querySelectorAll('.animate-float').forEach(el => el.style.animation = 'none');
+    gsap.utils.toArray('.anim-fade-up').forEach((el) => {
+      gsap.from(el, {
+        opacity: 0,
+        y: 40,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+        }
+      });
+    });
+
+    // Journey cards: subtle float-in + tilt
+    gsap.utils.toArray('.journey-card').forEach((card, index) => {
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        rotateX: -8,
+        duration: 0.9,
+        ease: 'power3.out',
+        delay: index * 0.05,
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+        }
+      });
+    });
+
+    // Parallax effect on journey background
+    const journeyBg = document.querySelector('.journey-bg');
+    if (journeyBg) {
+      gsap.to(journeyBg, {
+        yPercent: -15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: journeyBg,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      });
     }
+
+    // Scroll indicator bounce
+    const scrollDot = document.getElementById('scroll-dot');
+    gsap.to(scrollDot, {
+      y: 12,
+      duration: 1.6,
+      ease: 'sine.inOut',
+      repeat: -1,
+      yoyo: true
+    });
   </script>
 </body>
 </html>
