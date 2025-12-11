@@ -25,6 +25,7 @@
   <!-- GSAP for animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-uYnsQiJzCPVCKivk6qQ4xXo8j7ywnVUFlAsbW6nM4Z0D3pRJe6oYT0xqXKuC8OsK5ij9UcPGi9uJZ0sBstqzDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" integrity="sha512-v+Wfpb2tgwLh3XCYEnCqg2O8/SJqk8StnBz29hC2lc4k5DzF4WLhUeBFumR3eZ2ReFNr8V1LLtXAkx3X9h9QYw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- Supabase + dayjs timezone helpers -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
@@ -32,13 +33,244 @@
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
   <style>
     html { scroll-behavior: smooth; }
+    
+    /* Smooth transitions for all interactive elements */
+    * {
+      transition-property: transform, opacity, filter, box-shadow, background-color, border-color;
+      transition-duration: 0.3s;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Hide scrollbar but keep functionality */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(94, 234, 212, 0.5);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(94, 234, 212, 0.8);
+    }
+    
+    /* Animated gradient text */
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .gradient-text {
+      background: linear-gradient(-45deg, #a78bfa, #818cf8, #5eead4, #fde047);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-shift 8s ease infinite;
+    }
+    
+    /* Pulse animation for glowing elements */
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(94, 234, 212, 0.4), 0 0 40px rgba(129, 140, 248, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(94, 234, 212, 0.6), 0 0 60px rgba(129, 140, 248, 0.5);
+      }
+    }
+    
+    /* Floating animation for background blobs */
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      33% {
+        transform: translate(30px, -30px) rotate(120deg);
+      }
+      66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+      }
+    }
+    
+    .float-animation {
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    /* Ripple effect for buttons */
+    @keyframes ripple {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .ripple:active::after {
+      width: 300px;
+      height: 300px;
+    }
+    
+    /* Smooth header transitions */
+    header {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    header.hidden {
+      transform: translateY(-100%);
+    }
+    
+    /* Nav link active state */
+    nav a {
+      position: relative;
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #5eead4, #818cf8);
+      transition: width 0.3s ease;
+    }
+    
+    nav a:hover::after,
+    nav a.active::after {
+      width: 100%;
+    }
+    
+    /* Card hover effects */
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    
+    /* Smooth image reveal */
+    img {
+      opacity: 0;
+      transform: scale(1.1);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    img.loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    /* Loading skeleton animation */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+    
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        rgba(30, 41, 59, 0.4) 0%,
+        rgba(51, 65, 85, 0.6) 50%,
+        rgba(30, 41, 59, 0.4) 100%
+      );
+      background-size: 2000px 100%;
+      animation: shimmer 2s infinite;
+    }
+    
+    /* Chatbot styles */
+    #chatbot-window {
+      transform: translateY(100%) scale(0.8);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    
+    #chatbot-window.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    #chatbot-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #chatbot-button:hover {
+      transform: scale(1.05);
+    }
+    
+    .chat-message {
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .typing-indicator span {
+      animation: typing 1.4s infinite;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+      30% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body class="font-sans text-slate-100 bg-gradient-to-b from-[#050716] via-[#080B1F] to-[#0B1024]">
   <!-- Gradient blobs background -->
   <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-40 -left-20 h-80 w-80 rounded-full bg-gradient-to-br from-purple-500/40 via-indigo-500/30 to-teal-400/20 blur-3xl"></div>
-    <div class="absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-gradient-to-tr from-teal-400/30 via-sky-500/30 to-amber-300/20 blur-3xl"></div>
+    <div class="absolute -top-40 -left-20 h-80 w-80 rounded-full bg-gradient-to-br from-purple-500/40 via-indigo-500/30 to-teal-400/20 blur-3xl float-animation" style="animation-duration: 25s;"></div>
+    <div class="absolute -bottom-40 -right-20 h-96 w-96 rounded-full bg-gradient-to-tr from-teal-400/30 via-sky-500/30 to-amber-300/20 blur-3xl float-animation" style="animation-duration: 30s; animation-delay: -5s;"></div>
   </div>
 
   <!-- HEADER + TOP STICKY BAR -->
@@ -78,7 +310,7 @@
           <button class="hidden rounded-full border border-teal-300/60 bg-teal-300/5 px-3 py-1.5 text-xs font-medium text-teal-200 backdrop-blur-md transition hover:bg-teal-300/15 md:inline-flex">
             Schedule a Free Clarity Call
           </button>
-          <button class="hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-4 py-1.5 text-xs font-semibold text-slate-950 shadow-lg shadow-indigo-500/40 transition-transform hover:-translate-y-0.5 hover:shadow-teal-400/40 md:inline-flex">
+          <button class="hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-4 py-1.5 text-xs font-semibold text-slate-950 shadow-lg shadow-indigo-500/40 transition-all hover:-translate-y-0.5 hover:shadow-teal-400/40 hover:scale-105 md:inline-flex ripple">
             Book a Private Session
           </button>
           <!-- Dark / light toggle -->
@@ -100,7 +332,7 @@
         </p>
         <h1 class="text-3xl font-semibold leading-tight text-slate-50 md:text-5xl">
           For Body, Mind &amp;
-          <span class="bg-gradient-to-r from-purple-300 via-indigo-200 to-teal-200 bg-clip-text text-transparent">
+          <span class="gradient-text">
             Freeing Your Spirit!
           </span>
         </h1>
@@ -110,11 +342,11 @@
           You don’t have to walk this path alone.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
-          <button class="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-6 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_0_30px_rgba(88,101,242,0.6)] transition-transform hover:-translate-y-0.5">
+          <button class="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-6 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_0_30px_rgba(88,101,242,0.6)] transition-all hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(88,101,242,0.8)] ripple">
             <span class="relative z-10">Book a Private Session</span>
-            <span class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-teal-200/60 to-amber-200/40 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100"></span>
+            <span class="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-teal-200/60 to-amber-200/40 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100"></span>
           </button>
-          <button class="rounded-full border border-teal-300/60 bg-slate-900/30 px-5 py-2.5 text-sm font-medium text-teal-100 backdrop-blur-md transition hover:bg-slate-800/60">
+          <button class="rounded-full border border-teal-300/60 bg-slate-900/30 px-5 py-2.5 text-sm font-medium text-teal-100 backdrop-blur-md transition-all hover:bg-slate-800/60 hover:border-teal-200 hover:scale-105 hover:shadow-lg hover:shadow-teal-300/20 ripple">
             Schedule a Free Clarity Call
           </button>
         </div>
@@ -136,7 +368,8 @@
               <img
                 src="mnt/data/rs=w_727,cg_true.webp"
                 alt="Luann guiding a student in yoga posture"
-                class="h-56 w-full object-cover"
+                class="h-56 w-full object-cover loaded"
+                onload="this.classList.add('loaded')"
               />
             </div>
 
@@ -249,7 +482,7 @@
 
       <div class="grid gap-6 md:grid-cols-3">
         <!-- Card 1 -->
-        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(45,212,191,0.35)] transition-transform">
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl card-hover hover:shadow-[0_30px_80px_rgba(45,212,191,0.35)]">
           <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/30 via-indigo-400/25 to-teal-300/30"></div>
           </div>
@@ -280,7 +513,7 @@
         </article>
 
         <!-- Card 2 -->
-        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(129,140,248,0.35)] transition-transform">
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl card-hover hover:shadow-[0_30px_80px_rgba(129,140,248,0.35)]">
           <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
             <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/30 via-purple-400/25 to-teal-300/30"></div>
           </div>
@@ -311,7 +544,7 @@
         </article>
 
         <!-- Card 3 -->
-        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(251,191,36,0.35)] transition-transform">
+        <article class="group relative overflow-hidden rounded-3xl border border-slate-600/60 bg-slate-900/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.9)] backdrop-blur-xl card-hover hover:shadow-[0_30px_80px_rgba(251,191,36,0.35)]">
           <div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-60">
             <div class="absolute inset-0 bg-gradient-to-br from-amber-300/30 via-purple-400/25 to-teal-300/30"></div>
           </div>
@@ -685,33 +918,102 @@
 
     // GSAP Animations
     gsap.registerPlugin(ScrollTrigger);
+    if (typeof ScrollToPlugin !== 'undefined') {
+      gsap.registerPlugin(ScrollToPlugin);
+    }
 
-    gsap.utils.toArray('.anim-fade-up').forEach((el) => {
+    // Enhanced fade-up animations with stagger
+    gsap.utils.toArray('.anim-fade-up').forEach((el, index) => {
       gsap.from(el, {
         opacity: 0,
-        y: 40,
-        duration: 0.9,
+        y: 60,
+        scale: 0.95,
+        duration: 1.1,
         ease: 'power3.out',
+        delay: index * 0.1,
         scrollTrigger: {
           trigger: el,
-          start: 'top 80%',
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
         }
       });
     });
+    
+    // Header hide/show on scroll
+    let lastScroll = 0;
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 100) {
+        if (currentScroll > lastScroll && currentScroll > 200) {
+          header?.classList.add('hidden');
+        } else {
+          header?.classList.remove('hidden');
+        }
+      } else {
+        header?.classList.remove('hidden');
+      }
+      lastScroll = currentScroll;
+    });
+    
+    // Active nav link on scroll
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('section[id]');
+    
+    function updateActiveNavLink() {
+      const scrollY = window.pageYOffset;
+      sections.forEach((section) => {
+        const sectionHeight = section.offsetHeight;
+        const sectionTop = section.offsetTop - 100;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+          navLinks.forEach((link) => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${sectionId}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', updateActiveNavLink);
 
-    // Journey cards: subtle float-in + tilt
+    // Journey cards: subtle float-in + tilt with stagger
     gsap.utils.toArray('.journey-card').forEach((card, index) => {
       gsap.from(card, {
         opacity: 0,
-        y: 40,
-        rotateX: -8,
-        duration: 0.9,
+        y: 50,
+        rotateX: -10,
+        scale: 0.9,
+        duration: 1,
         ease: 'power3.out',
-        delay: index * 0.05,
+        delay: index * 0.1,
         scrollTrigger: {
           trigger: card,
           start: 'top 85%',
+          toggleActions: 'play none none reverse',
         }
+      });
+      
+      // Add hover animation
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          y: -5,
+          scale: 1.02,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          y: 0,
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
       });
     });
 
@@ -719,25 +1021,277 @@
     const journeyBg = document.querySelector('.journey-bg');
     if (journeyBg) {
       gsap.to(journeyBg, {
-        yPercent: -15,
+        yPercent: -20,
         ease: 'none',
         scrollTrigger: {
           trigger: journeyBg,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: 1,
         }
       });
     }
+    
+    // Service cards stagger animation
+    const serviceCards = document.querySelectorAll('#services article');
+    gsap.utils.toArray(serviceCards).forEach((card, index) => {
+      gsap.from(card, {
+        opacity: 0,
+        y: 60,
+        rotateY: -15,
+        duration: 1,
+        ease: 'power3.out',
+        delay: index * 0.15,
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      });
+      
+      // Enhanced hover effect
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, {
+          y: -10,
+          rotateY: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+        });
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          y: 0,
+          rotateY: -15,
+          duration: 0.4,
+          ease: 'power2.out',
+        });
+      });
+    });
+    
+    // Testimonials stagger animation
+    const testimonials = document.querySelectorAll('section:nth-of-type(6) figure');
+    gsap.utils.toArray(testimonials).forEach((testimonial, index) => {
+      gsap.from(testimonial, {
+        opacity: 0,
+        x: index % 2 === 0 ? -50 : 50,
+        y: 40,
+        duration: 0.9,
+        ease: 'power3.out',
+        delay: index * 0.12,
+        scrollTrigger: {
+          trigger: testimonial,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        }
+      });
+    });
+    
+    // Number counting animation for stats
+    function animateValue(element, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const currentValue = Math.floor(progress * (end - start) + start);
+        if (element.textContent.match(/^\d+$/)) {
+          element.textContent = currentValue;
+        }
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          element.textContent = end;
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+    
+    // Animate stats when in view
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const statNumbers = entry.target.querySelectorAll('p.text-lg');
+          statNumbers.forEach((stat) => {
+            const text = stat.textContent.trim();
+            const numMatch = text.match(/^\d+$/);
+            if (numMatch) {
+              const num = parseInt(numMatch[0]);
+              stat.textContent = '0';
+              setTimeout(() => {
+                animateValue(stat, 0, num, 2000);
+              }, 200);
+            }
+          });
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    const statsSection = document.querySelector('#about > div:nth-child(2)');
+    if (statsSection) {
+      statsObserver.observe(statsSection);
+    }
+    
+    // Smooth reveal for hero content
+    const heroContent = document.querySelector('#home section');
+    if (heroContent) {
+      const heroTitle = heroContent.querySelector('h1');
+      const heroText = heroContent.querySelectorAll('p');
+      const heroButtons = heroContent.querySelectorAll('button');
+      
+      gsap.from(heroTitle, {
+        opacity: 0,
+        y: 30,
+        duration: 1,
+        ease: 'power3.out',
+        delay: 0.2,
+      });
+      
+      gsap.from(heroText, {
+        opacity: 0,
+        y: 20,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.15,
+        delay: 0.4,
+      });
+      
+      gsap.from(heroButtons, {
+        opacity: 0,
+        y: 20,
+        scale: 0.9,
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.1,
+        delay: 0.8,
+      });
+    }
+    
+    // Hero image animation
+    const heroImageCard = document.querySelector('#home > section > div:nth-child(2)');
+    if (heroImageCard) {
+      gsap.from(heroImageCard, {
+        opacity: 0,
+        x: 50,
+        rotateY: 15,
+        duration: 1.2,
+        ease: 'power3.out',
+        delay: 0.3,
+      });
+    }
+    
+    // Button pulse effect for CTA buttons
+    const ctaButtons = document.querySelectorAll('button[class*="gradient"], .rounded-full.bg-gradient-to-r');
+    ctaButtons.forEach((btn) => {
+      setInterval(() => {
+        gsap.to(btn, {
+          scale: 1.02,
+          duration: 1.5,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: 1,
+        });
+      }, 5000);
+    });
+    
+    // Smooth text reveal with gradient
+    const gradientTextElements = document.querySelectorAll('.gradient-text');
+    gradientTextElements.forEach((el) => {
+      gsap.from(el, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 1,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+        }
+      });
+    });
 
-    // Scroll indicator bounce
+    // Scroll indicator bounce with enhanced animation
     const scrollDot = document.getElementById('scroll-dot');
-    gsap.to(scrollDot, {
-      y: 12,
-      duration: 1.6,
-      ease: 'sine.inOut',
-      repeat: -1,
-      yoyo: true
+    if (scrollDot) {
+      const scrollIndicator = scrollDot.parentElement;
+      
+      gsap.to(scrollDot, {
+        y: 12,
+        duration: 1.6,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+      });
+      
+      // Add mouse hover effect
+      scrollIndicator?.addEventListener('mouseenter', () => {
+        gsap.to(scrollDot, {
+          scale: 1.5,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+      
+      scrollIndicator?.addEventListener('mouseleave', () => {
+        gsap.to(scrollDot, {
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+    }
+    
+    // WhatsApp button floating animation
+    const whatsappBtn = document.querySelector('a[href*="wa.me"]');
+    if (whatsappBtn) {
+      gsap.to(whatsappBtn, {
+        y: -10,
+        duration: 2,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+      });
+      
+      whatsappBtn.addEventListener('mouseenter', () => {
+        gsap.to(whatsappBtn, {
+          scale: 1.1,
+          rotation: 5,
+          duration: 0.3,
+          ease: 'back.out(1.7)',
+        });
+      });
+      
+      whatsappBtn.addEventListener('mouseleave', () => {
+        gsap.to(whatsappBtn, {
+          scale: 1,
+          rotation: 0,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+    }
+    
+    // Smooth page transitions with GSAP
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (target) {
+          if (typeof ScrollToPlugin !== 'undefined') {
+            gsap.to(window, {
+              duration: 1.2,
+              scrollTo: {
+                y: target,
+                offsetY: 100,
+              },
+              ease: 'power2.inOut',
+            });
+          } else {
+            // Fallback to native smooth scroll
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
     });
   </script>
 
@@ -1117,6 +1671,459 @@
 
     initAuth();
   </script>
+
+  <!-- AI Chatbot Script -->
+  <script>
+    // IMPORTANT: OpenAI API requires a backend proxy due to CORS restrictions
+    // Option 1: Use your backend proxy endpoint (recommended)
+    // Option 2: Create a serverless function (Vercel/Netlify/Cloudflare)
+    // Option 3: For testing only, you can use a CORS proxy (NOT recommended for production)
+    
+    // Backend proxy endpoint - Update this to your serverless function URL
+    // Example: 'https://your-domain.com/api/chatbot' or '/api/chatbot' for same-domain
+    // For Vercel: 'https://your-project.vercel.app/api/chatbot'
+    // For Netlify: 'https://your-site.netlify.app/.netlify/functions/chatbot'
+    const BACKEND_PROXY_URL = ''; // TODO: Set this after deploying the serverless function
+    
+    // Fallback: Direct API key (only works if CORS is bypassed via proxy)
+    const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY_HERE';
+    
+    // Check if configured
+    const useProxy = BACKEND_PROXY_URL && BACKEND_PROXY_URL.trim() !== '';
+    const isAPIKeyConfigured = OPENAI_API_KEY && OPENAI_API_KEY !== 'YOUR_OPENAI_API_KEY_HERE';
+    
+    // Company knowledge base for the AI
+    const COMPANY_KNOWLEDGE = `You are a helpful AI assistant for Dream Yoga Studio & Wellness Center. Here is everything you need to know:
+
+ABOUT DREAM YOGA STUDIO:
+- Founded in 2002 by Luann Fulbright
+- Located in Ashburn, VA
+- Offering Yoga & Meditation Classes, Yoga Therapy & Life Coaching since 2001
+- Phone: 703-448-YOGA (9642)
+- Email: Luann@DreamYogaStudio.com
+- Sessions available in-person in Ashburn, VA and online via Zoom
+
+ABOUT LUANN FULBRIGHT:
+- Founder of Dream Yoga Studio & Wellness Center
+- Spiritual teacher, yoga therapist, dream interpreter, hospice volunteer, and end-of-life doula
+- Guiding seekers since 1975 to live consciously, fully, and with meaning
+- Practices yoga and meditation since 1975
+- Started teaching yoga & meditation in 2001
+- Created the GMU For-Credit Yoga Program
+- Specializes in: Yoga & Meditation, Dream Interpretation, Life & End-of-Life Mentoring
+
+SERVICES OFFERED:
+1. Private Yoga, Yoga Therapy & Meditation
+   - One-on-one practices tailored to each person's body, goals, and life season
+   - Customized sequences & breathwork
+   - Support for stress, pain, and mobility
+   - Suitable for all ages & stages
+
+2. Dream Interpretation
+   - Helps understand dream symbols & recurring themes
+   - Uses dreams for problem-solving & insight
+   - Private or small group sessions available
+
+3. Life & End-of-Life Mentoring
+   - Compassionate presence & listening
+   - Helps clarify what truly matters
+   - Support around illness & end-of-life
+   - "We are all just walking each other home" - Luann's philosophy
+
+BOOKING INFORMATION:
+- Sessions are 1 hour long
+- Availability: Monday–Saturday, 6:00 AM to 7:00 PM (USA/Eastern timezone)
+- Book through the website booking section (requires login)
+- Users can view, reschedule, or cancel bookings
+- Sundays are not available
+
+PHILOSOPHY & APPROACH:
+- Focuses on Body, Mind & Spirit
+- Uses practices from yoga, meditation, breathwork, dream interpretation, Reiki, and Ayurveda
+- Helps people navigate life transitions and end-of-life with consciousness
+- Stages of the seeker's journey: The Stirring, The Exploration, The Awakening, Living Consciously
+- Each step is sacred and non-linear - a spiral journey
+
+CONTACT:
+- Best way to reach Luann: Email at Luann@DreamYogaStudio.com
+- WhatsApp: Available via the website button
+- Location: Ashburn, VA
+- Studio Phone: 703-448-YOGA (9642)
+
+NEWSLETTER:
+- Subscribe for wisdom quotes, life and end-of-life guidance, and announcements
+- No spam, just heartfelt guidance and inspiration
+
+When answering questions:
+- Be warm, compassionate, and helpful
+- Use information only from the knowledge base above
+- If asked about something not in the knowledge base, politely say you don't have that information but suggest they email Luann directly
+- For booking questions, direct them to the booking section on the website
+- Always maintain the spiritual, mindful tone of the studio
+- Keep responses concise but informative
+- If someone wants to schedule, guide them to the booking section or suggest emailing Luann`;
+
+    let chatHistory = [
+      {
+        role: 'system',
+        content: COMPANY_KNOWLEDGE
+      }
+    ];
+
+    // Initialize chatbot when DOM is ready
+    function initChatbot() {
+      // Chatbot functionality - get DOM elements
+      const chatbotButton = document.getElementById('chatbot-button');
+      const chatbotWindow = document.getElementById('chatbot-window');
+      const chatbotClose = document.getElementById('chatbot-close');
+      const chatbotInput = document.getElementById('chatbot-input');
+      const chatbotSend = document.getElementById('chatbot-send');
+      const chatbotMessages = document.getElementById('chatbot-messages');
+      
+      // Check if elements exist
+      if (!chatbotButton || !chatbotWindow || !chatbotClose || !chatbotInput || !chatbotSend || !chatbotMessages) {
+        console.error('Chatbot elements not found. Retrying...');
+        setTimeout(initChatbot, 100);
+        return;
+      }
+      
+      // Toggle chatbot window
+      chatbotButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        chatbotWindow.classList.add('open');
+        chatbotButton.style.display = 'none';
+        setTimeout(() => chatbotInput.focus(), 100);
+      });
+
+      chatbotClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        chatbotWindow.classList.remove('open');
+        chatbotButton.style.display = 'inline-flex';
+      });
+      
+      // Also close on outside click
+      document.addEventListener('click', (e) => {
+        if (chatbotWindow.classList.contains('open')) {
+          const container = document.getElementById('chatbot-container');
+          if (container && !container.contains(e.target)) {
+            chatbotWindow.classList.remove('open');
+            chatbotButton.style.display = 'inline-flex';
+          }
+        }
+      });
+
+        // Send message function
+      async function sendMessage() {
+      const message = chatbotInput.value.trim();
+      if (!message) return;
+
+      // Check if configured
+      if (!useProxy && !isAPIKeyConfigured) {
+        addMessageToUI(
+          'The chatbot needs a backend proxy endpoint configured. Please set BACKEND_PROXY_URL in the code. For now, please email Luann@DreamYogaStudio.com with your questions, or contact us at 703-448-YOGA (9642).',
+          'assistant',
+          true
+        );
+        chatbotInput.value = '';
+        return;
+      }
+
+      // Add user message to UI
+      addMessageToUI(message, 'user');
+      chatbotInput.value = '';
+      
+      // Show typing indicator
+      const typingId = showTypingIndicator();
+      
+      try {
+        // Add user message to chat history
+        chatHistory.push({ role: 'user', content: message });
+        
+        // Prepare request
+        let apiUrl, requestOptions;
+        
+        if (useProxy) {
+          // Use backend proxy
+          apiUrl = BACKEND_PROXY_URL;
+          requestOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              messages: chatHistory,
+              model: 'gpt-3.5-turbo',
+              temperature: 0.7,
+              max_tokens: 500
+            })
+          };
+        } else {
+          // Direct API call (will fail due to CORS, but try anyway)
+          apiUrl = 'https://api.openai.com/v1/chat/completions';
+          requestOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+              model: 'gpt-3.5-turbo',
+              messages: chatHistory,
+              temperature: 0.7,
+              max_tokens: 500
+            })
+          };
+        }
+        
+        // Call API
+        const response = await fetch(apiUrl, requestOptions);
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: { message: `HTTP ${response.status}: ${response.statusText}` } }));
+          throw new Error(errorData.error?.message || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Remove typing indicator
+        removeTypingIndicator(typingId);
+        
+        if (data.error) {
+          throw new Error(data.error.message);
+        }
+
+        const aiResponse = data.choices[0].message.content;
+        
+        // Add AI response to chat history
+        chatHistory.push({ role: 'assistant', content: aiResponse });
+        
+        // Add AI message to UI
+        addMessageToUI(aiResponse, 'assistant');
+        
+      } catch (error) {
+        // Remove typing indicator
+        removeTypingIndicator(typingId);
+        
+        // Show error message with better debugging
+        console.error('Chatbot error:', error);
+        console.error('Error details:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
+        
+        let errorMessage = 'I apologize, but I\'m having trouble connecting right now. ';
+        
+        // Check for specific error types
+        if (error.message.includes('CORS') || error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+          errorMessage += 'This appears to be a CORS (Cross-Origin) issue. OpenAI API requires a backend proxy. ';
+          errorMessage += 'Please set up a backend endpoint to proxy the requests, or contact your developer. ';
+        } else if (error.message.includes('401') || error.message.includes('Invalid') || error.message.includes('Unauthorized')) {
+          errorMessage += 'The API key appears to be invalid or expired. Please check the configuration. ';
+        } else if (error.message.includes('429') || error.message.includes('rate limit')) {
+          errorMessage += 'Too many requests. Please try again in a moment. ';
+        } else if (error.message) {
+          errorMessage += `Error: ${error.message}. `;
+        }
+        
+        errorMessage += 'For immediate assistance, please email Luann@DreamYogaStudio.com or call 703-448-YOGA (9642).';
+        
+        addMessageToUI(errorMessage, 'assistant', true);
+      }
+      }
+
+      // Add message to UI
+      function addMessageToUI(message, sender, isError = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message flex items-start gap-3 ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+      
+      if (sender === 'user') {
+        messageDiv.innerHTML = `
+          <div class="flex-1">
+            <div class="rounded-2xl rounded-tr-none bg-gradient-to-r from-purple-500/80 to-indigo-500/80 p-3 text-sm text-white">
+              <p>${escapeHtml(message)}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        messageDiv.innerHTML = `
+          <div class="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-teal-300 flex items-center justify-center flex-shrink-0 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div class="flex-1">
+            <div class="rounded-2xl rounded-tl-none ${isError ? 'bg-rose-900/40 border border-rose-700/50' : 'bg-slate-800/60'} p-3 text-sm text-slate-100">
+              <p>${formatMessage(message)}</p>
+            </div>
+          </div>
+        `;
+      }
+      
+      chatbotMessages.appendChild(messageDiv);
+      scrollToBottom();
+      }
+
+      // Show typing indicator
+      function showTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.id = 'typing-indicator';
+      typingDiv.className = 'chat-message flex items-start gap-3';
+      typingDiv.innerHTML = `
+        <div class="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-teal-300 flex items-center justify-center flex-shrink-0 shadow-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="rounded-2xl rounded-tl-none bg-slate-800/60 p-3 text-sm">
+            <div class="typing-indicator flex gap-1">
+              <span class="w-2 h-2 rounded-full bg-teal-300"></span>
+              <span class="w-2 h-2 rounded-full bg-teal-300"></span>
+              <span class="w-2 h-2 rounded-full bg-teal-300"></span>
+            </div>
+          </div>
+        </div>
+      `;
+      chatbotMessages.appendChild(typingDiv);
+      scrollToBottom();
+      return 'typing-indicator';
+      }
+
+      // Remove typing indicator
+      function removeTypingIndicator(id) {
+      const indicator = document.getElementById(id);
+      if (indicator) {
+        indicator.remove();
+      }
+      }
+
+      // Scroll to bottom of messages
+      function scrollToBottom() {
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+      }
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Format message (convert line breaks to <br>)
+      function formatMessage(text) {
+        return escapeHtml(text).replace(/\n/g, '<br>');
+      }
+
+      // Send on button click
+      chatbotSend.addEventListener('click', sendMessage);
+
+      // Send on Enter key
+      chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+
+      // Animate chatbot button on load
+      if (typeof gsap !== 'undefined') {
+        gsap.from('#chatbot-button', {
+          opacity: 0,
+          x: -50,
+          duration: 0.8,
+          ease: 'power3.out',
+          delay: 1
+        });
+      }
+    } // End of initChatbot function
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initChatbot);
+    } else {
+      // DOM is already ready
+      initChatbot();
+    }
+  </script>
+
+  <!-- AI Chatbot -->
+  <div id="chatbot-container" class="fixed bottom-5 left-5 z-50 flex flex-col items-end gap-3">
+    <!-- Chat Window -->
+    <div id="chatbot-window" class="w-80 md:w-96 h-[500px] rounded-3xl border border-slate-700/70 bg-slate-900/95 backdrop-blur-xl shadow-2xl shadow-slate-900/80 flex flex-col overflow-hidden">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-4 border-b border-slate-700/70 bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-teal-500/20">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full bg-gradient-to-br from-purple-400 to-teal-300 flex items-center justify-center shadow-lg shadow-purple-500/40">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-100">Dream Yoga Assistant</p>
+            <p class="text-xs text-teal-300/80">Ask me anything!</p>
+          </div>
+        </div>
+        <button id="chatbot-close" class="h-8 w-8 rounded-full border border-slate-600/70 bg-slate-800/60 text-slate-300 hover:bg-slate-700/60 hover:text-teal-300 transition flex items-center justify-center" aria-label="Close chat">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Messages Container -->
+      <div id="chatbot-messages" class="flex-1 overflow-y-auto p-4 space-y-4">
+        <div class="chat-message flex items-start gap-3">
+          <div class="h-8 w-8 rounded-full bg-gradient-to-br from-purple-400 to-teal-300 flex items-center justify-center flex-shrink-0 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div class="flex-1">
+            <div class="rounded-2xl rounded-tl-none bg-slate-800/60 p-3 text-sm text-slate-100">
+              <p>Hello! I'm your Dream Yoga assistant. I can help you learn about our services, Luann, booking information, classes, and more. What would you like to know?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Input Area -->
+      <div class="p-4 border-t border-slate-700/70 bg-slate-950/50">
+        <div class="flex gap-2">
+          <input 
+            type="text" 
+            id="chatbot-input" 
+            placeholder="Type your question..." 
+            class="flex-1 rounded-full border border-slate-600/70 bg-slate-900/80 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-teal-300 focus:outline-none focus:ring-1 focus:ring-teal-300"
+            autocomplete="off"
+          />
+          <button 
+            id="chatbot-send" 
+            class="rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-indigo-500/40 hover:shadow-teal-400/40 transition hover:scale-105 flex items-center justify-center"
+            aria-label="Send message"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-2 text-center">Powered by AI • Answers may take a moment</p>
+      </div>
+    </div>
+    
+    <!-- Chat Button -->
+    <button 
+      id="chatbot-button" 
+      class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-teal-400 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-500/40 hover:shadow-teal-400/60"
+      aria-label="Open chat"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <span>Ask me anything</span>
+    </button>
+  </div>
 
   <!-- Floating WhatsApp contact button -->
   <a
