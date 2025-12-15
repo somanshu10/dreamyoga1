@@ -1,42 +1,30 @@
+import OpenAI from "openai";
+
 export default async function handler(req, res) {
-  // ✅ CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  // Handle preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { messages } = req.body;
-
-    if (!messages) {
-      return res.status(400).json({ error: "Messages are required" });
-    }
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages
-      })
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     });
 
-    const data = await response.json();
-    return res.status(200).json(data);
+    const { messages } = req.body;
 
-  } catch (error) {
-    console.error("Chatbot error:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    const response = await openai.responses.create({
+      model: "gpt-4.1-mini",
+      input: messages,
+    });
+
+    const output =
+      response.output_text ||
+      response.output?.[0]?.content?.[0]?.text ||
+      "I'm here to help.";
+
+    res.status(200).json({ output_text: output });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "AI server error" });
   }
 }

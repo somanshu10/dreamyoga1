@@ -18,6 +18,7 @@
       },
     };
   </script>
+  
   <!-- Google Fonts (optional) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1683,7 +1684,7 @@
     // Example: 'https://your-domain.com/api/chatbot' or '/api/chatbot' for same-domain
     // For Vercel: 'https://your-project.vercel.app/api/chatbot'
     // For Netlify: 'https://your-site.netlify.app/.netlify/functions/chatbot'
-    const BACKEND_PROXY_URL = 'https://dreamyoga1-mfzsvewna-somanshu10s-projects.vercel.app/api/chatbot'; // TODO: Set this after deploying the serverless function
+    const BACKEND_PROXY_URL = '/api/chatbot'; // TODO: Set this after deploying the serverless function
     
     // Fallback: Direct API key (only works if CORS is bypassed via proxy)
     const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY_HERE';
@@ -1791,7 +1792,7 @@ When answering questions:
       chatbotButton.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        chatbotWindow.classList.add('open');
+        chatbotWindow.classList.toggle('open');
         chatbotButton.style.display = 'none';
         setTimeout(() => chatbotInput.focus(), 100);
       });
@@ -1816,123 +1817,49 @@ When answering questions:
 
         // Send message function
       async function sendMessage() {
-      const message = chatbotInput.value.trim();
-      if (!message) return;
+  const message = chatbotInput.value.trim();
+  if (!message) return;
 
-      // Check if configured
-      if (!useProxy && !isAPIKeyConfigured) {
-        addMessageToUI(
-          'The chatbot needs a backend proxy endpoint configured. Please set BACKEND_PROXY_URL in the code. For now, please email Luann@DreamYogaStudio.com with your questions, or contact us at 703-448-YOGA (9642).',
-          'assistant',
-          true
-        );
-        chatbotInput.value = '';
-        return;
-      }
+  addMessageToUI(message, 'user');
+  chatbotInput.value = '';
 
-      // Add user message to UI
-      addMessageToUI(message, 'user');
-      chatbotInput.value = '';
-      
-      // Show typing indicator
-      const typingId = showTypingIndicator();
-      
-      try {
-        // Add user message to chat history
-        chatHistory.push({ role: 'user', content: message });
-        
-        // Prepare request
-        let apiUrl, requestOptions;
-        
-        if (useProxy) {
-          // Use backend proxy
-          apiUrl = BACKEND_PROXY_URL;
-          requestOptions = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              messages: chatHistory,
-              model: 'gpt-3.5-turbo',
-              temperature: 0.7,
-              max_tokens: 500
-            })
-          };
-        } else {
-          // Direct API call (will fail due to CORS, but try anyway)
-          apiUrl = 'https://api.openai.com/v1/chat/completions';
-          requestOptions = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-              model: 'gpt-3.5-turbo',
-              messages: chatHistory,
-              temperature: 0.7,
-              max_tokens: 500
-            })
-          };
-        }
-        
-        // Call API
-        const response = await fetch(apiUrl, requestOptions);
+  const typingId = showTypingIndicator();
+  chatHistory.push({ role: 'user', content: message });
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ error: { message: `HTTP ${response.status}: ${response.statusText}` } }));
-          throw new Error(errorData.error?.message || `HTTP ${response.status}`);
-        }
+  try {
+    const response = await fetch('/api/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory })
+    });
 
-        const data = await response.json();
-        
-        // Remove typing indicator
-        removeTypingIndicator(typingId);
-        
-        if (data.error) {
-          throw new Error(data.error.message);
-        }
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
-        const aiResponse = data.choices[0].message.content;
-        
-        // Add AI response to chat history
-        chatHistory.push({ role: 'assistant', content: aiResponse });
-        
-        // Add AI message to UI
-        addMessageToUI(aiResponse, 'assistant');
-        
-      } catch (error) {
-        // Remove typing indicator
-        removeTypingIndicator(typingId);
-        
-        // Show error message with better debugging
-        console.error('Chatbot error:', error);
-        console.error('Error details:', {
-          message: error.message,
-          name: error.name,
-          stack: error.stack
-        });
-        
-        let errorMessage = 'I apologize, but I\'m having trouble connecting right now. ';
-        
-        // Check for specific error types
-        if (error.message.includes('CORS') || error.message.includes('Failed to fetch') || error.name === 'TypeError') {
-          errorMessage += 'This appears to be a CORS (Cross-Origin) issue. OpenAI API requires a backend proxy. ';
-          errorMessage += 'Please set up a backend endpoint to proxy the requests, or contact your developer. ';
-        } else if (error.message.includes('401') || error.message.includes('Invalid') || error.message.includes('Unauthorized')) {
-          errorMessage += 'The API key appears to be invalid or expired. Please check the configuration. ';
-        } else if (error.message.includes('429') || error.message.includes('rate limit')) {
-          errorMessage += 'Too many requests. Please try again in a moment. ';
-        } else if (error.message) {
-          errorMessage += `Error: ${error.message}. `;
-        }
-        
-        errorMessage += 'For immediate assistance, please email Luann@DreamYogaStudio.com or call 703-448-YOGA (9642).';
-        
-        addMessageToUI(errorMessage, 'assistant', true);
-      }
-      }
+    const data = await response.json();
+
+    removeTypingIndicator(typingId);
+
+    const aiResponse =
+      data.output_text ||
+      data.output?.[0]?.content?.[0]?.text ||
+      "I'm here to help — could you please rephrase your question?";
+
+    chatHistory.push({ role: 'assistant', content: aiResponse });
+    addMessageToUI(aiResponse, 'assistant');
+
+  } catch (error) {
+    removeTypingIndicator(typingId);
+    console.error(error);
+
+    addMessageToUI(
+      "I'm having trouble responding right now. Please email Luann@DreamYogaStudio.com or call 703-448-YOGA (9642).",
+      'assistant',
+      true
+    );
+  }
+}
 
       // Add message to UI
       function addMessageToUI(message, sender, isError = false) {
@@ -2141,5 +2068,10 @@ When answering questions:
     </span>
     <span>Chat on WhatsApp</span>
   </a>
+    <!-- Chatbot Button -->
+  
+
+
+
 </body>
 </html>
