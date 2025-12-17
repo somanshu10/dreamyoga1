@@ -1796,10 +1796,14 @@ async function sendMessage() {
     });
 
     const data = await res.json();
-    addMessage(data.reply, "bot");
+console.log("API response:", data);
+addMessage(data.reply || JSON.stringify(data), "bot");
+
   } catch (err) {
-    addMessage("Sorry, something went wrong.", "bot");
-  }
+  console.error("Fetch error:", err);
+  addMessage("Error connecting to server.", "bot");
+}
+
 }
 
 function addMessage(text, type) {
